@@ -13,6 +13,11 @@
         <vm:MainViewModel/>
     </Window.DataContext>
 
+    <Window.Resources>
+        <local:BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <local:NullToVisibilityConverter x:Key="NullToVis"/>
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <!-- Başlık barı -->

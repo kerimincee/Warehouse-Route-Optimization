@@ -123,7 +123,6 @@
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Margin" Value="0,0,0,8"/>
-            <Setter Property="TextTransform" Value="Uppercase"/>
         </Style>
 
         <Style x:Key="FieldLabel" TargetType="TextBlock">

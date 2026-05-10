@@ -42,19 +42,6 @@ namespace WarehouseSimulator.Views
         public MainWindow()
         {
             InitializeComponent();
-            RegisterConverters();
-        }
-
-        /// <summary>
-        /// XAML Converter'larını kayıt eder
-        /// </summary>
-        private void RegisterConverters()
-        {
-            // BoolToVisibility converter
-            Resources["BoolToVis"] = new BooleanToVisibilityConverter();
-
-            // NullToVisibility (null ise collapse, değilse visible)
-            Resources["NullToVis"] = new NullToVisibilityConverter();
         }
 
         // =========================================================
