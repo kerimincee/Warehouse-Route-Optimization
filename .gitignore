@@ -1,0 +1,23 @@
+# .NET Core, .NET 5+
+[Bb]in/
+[Oo]bj/
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio
+.vs/
+.vscode/
+
+# Database (SQLite)
+*.db
+*.db-shm
+*.db-wal
+
+# Build artifacts
+publish/
+*.exe
+*.dll
+*.pdb
+*.msi
+*.zip

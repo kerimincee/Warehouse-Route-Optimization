@@ -1,0 +1,463 @@
+<Window x:Class="WarehouseSimulator.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:WarehouseSimulator.ViewModels"
+        xmlns:local="clr-namespace:WarehouseSimulator.Views"
+        Title="🏭 Depo Rota Optimizasyonu — Roodbergen Interactive Warehouse"
+        Height="820" Width="1400"
+        MinHeight="700" MinWidth="1100"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BrushBackgroundDark}">
+
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <!-- Başlık barı -->
+            <RowDefinition Height="56"/>
+            <!-- Ana içerik -->
+            <RowDefinition Height="*"/>
+            <!-- Durum barı -->
+            <RowDefinition Height="32"/>
+        </Grid.RowDefinitions>
+
+        <!-- ========================================= -->
+        <!--  BAŞLIK BARI                              -->
+        <!-- ========================================= -->
+        <Border Grid.Row="0"
+                Background="{StaticResource BrushBackgroundMid}"
+                BorderBrush="{StaticResource BrushBorder}"
+                BorderThickness="0,0,0,1">
+            <Grid Margin="20,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Logo + Başlık -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="📦" FontSize="24" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="DEPO ROTA OPTİMİZASYONU"
+                                   Foreground="{StaticResource BrushTextPrimary}"
+                                   FontFamily="Segoe UI"
+                                   FontWeight="Bold"
+                                   FontSize="16"/>
+                        <TextBlock Text="Roodbergen Interactive Warehouse Simulator"
+                                   Foreground="{StaticResource BrushTextSecondary}"
+                                   FontFamily="Segoe UI"
+                                   FontSize="11"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Özet bilgi -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center"
+                            Visibility="{Binding IsWarehouseBuilt, Converter={StaticResource BoolToVis}}">
+                    <Border Background="{StaticResource BrushBackgroundLight}"
+                            CornerRadius="20" Padding="12,4" Margin="8,0">
+                        <TextBlock Foreground="{StaticResource BrushAccentBlue}"
+                                   FontFamily="Segoe UI" FontSize="12">
+                            <Run Text="🔷 Blok: "/>
+                            <Run Text="{Binding BlockCount}"/>
+                            <Run Text=" | Koridor: "/>
+                            <Run Text="{Binding AislesPerBlock}"/>
+                            <Run Text=" | Raf/Koridor: "/>
+                            <Run Text="{Binding ShelvesPerAisle}"/>
+                        </TextBlock>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ========================================= -->
+        <!--  ANA İÇERİK (3 Sütun)                    -->
+        <!-- ========================================= -->
+        <Grid Grid.Row="1" Margin="12,10,12,10">
+            <Grid.ColumnDefinitions>
+                <!-- Sol panel: Parametreler -->
+                <ColumnDefinition Width="240"/>
+                <!-- Orta: Depo görselleştirme -->
+                <ColumnDefinition Width="*"/>
+                <!-- Sağ panel: Sonuçlar -->
+                <ColumnDefinition Width="280"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ===================================== -->
+            <!--  SOL PANEL: Parametreler              -->
+            <!-- ===================================== -->
+            <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="0,0,8,0">
+                <StackPanel>
+
+                    <!-- Depo Tasarımı Kartı -->
+                    <Border Style="{StaticResource CardBorder}" Margin="0,0,0,8">
+                        <StackPanel>
+                            <TextBlock Text="⚙️  DEPO TASARIMI" Style="{StaticResource SectionHeader}"/>
+
+                            <TextBlock Text="Blok Sayısı" Style="{StaticResource FieldLabel}"/>
+                            <TextBox x:Name="txtBlockCount" Style="{StaticResource ModernTextBox}"
+                                     Text="{Binding BlockCount, UpdateSourceTrigger=PropertyChanged}"/>
+
+                            <TextBlock Text="Koridor Sayısı (Blok başına)" Style="{StaticResource FieldLabel}"/>
+                            <TextBox x:Name="txtAisles" Style="{StaticResource ModernTextBox}"
+                                     Text="{Binding AislesPerBlock, UpdateSourceTrigger=PropertyChanged}"/>
+
+                            <TextBlock Text="Raf Sayısı (Koridor başına)" Style="{StaticResource FieldLabel}"/>
+                            <TextBox x:Name="txtShelves" Style="{StaticResource ModernTextBox}"
+                                     Text="{Binding ShelvesPerAisle, UpdateSourceTrigger=PropertyChanged}"/>
+
+                            <TextBlock Text="Kapı Lokasyonu" Style="{StaticResource FieldLabel}"/>
+                            <ComboBox x:Name="cmbDoor" Style="{StaticResource ModernComboBox}"
+                                      SelectedIndex="{Binding DoorLocation}"
+                                      Margin="0,0,0,4">
+                                <ComboBoxItem Content="🚪 Sol (Başlangıç)"/>
+                                <ComboBoxItem Content="🚪 Sağ (Son)"/>
+                                <ComboBoxItem Content="🚪 Orta"/>
+                            </ComboBox>
+
+                            <!-- Opsiyonel: Mesafe parametreleri -->
+                            <Expander Header="📏 Mesafe Parametreleri"
+                                      Foreground="{StaticResource BrushTextSecondary}"
+                                      Margin="0,6,0,0">
+                                <StackPanel Margin="0,4,0,0">
+                                    <TextBlock Text="Koridor Uzunluğu (birim)" Style="{StaticResource FieldLabel}"/>
+                                    <TextBox Style="{StaticResource ModernTextBox}"
+                                             Text="{Binding AisleLength, UpdateSourceTrigger=PropertyChanged}"/>
+
+                                    <TextBlock Text="Geçiş Mesafesi (birim)" Style="{StaticResource FieldLabel}"/>
+                                    <TextBox Style="{StaticResource ModernTextBox}"
+                                             Text="{Binding CrossAisleDistance, UpdateSourceTrigger=PropertyChanged}"/>
+                                </StackPanel>
+                            </Expander>
+
+                            <Button Content="🏗️  Depoyu Göster"
+                                    Style="{StaticResource PrimaryButton}"
+                                    Click="BtnBuildWarehouse_Click"
+                                    Margin="0,12,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Sipariş Oluşturma Kartı -->
+                    <Border Style="{StaticResource CardBorder}" Margin="0,0,0,8"
+                            IsEnabled="{Binding IsWarehouseBuilt}">
+                        <StackPanel>
+                            <TextBlock Text="🛒  SİPARİŞ OLUŞTURMA" Style="{StaticResource SectionHeader}"/>
+
+                            <TextBlock Text="Rastgele Ürün Sayısı" Style="{StaticResource FieldLabel}"/>
+                            <TextBox Style="{StaticResource ModernTextBox}"
+                                     Text="{Binding RandomOrderCount, UpdateSourceTrigger=PropertyChanged}"/>
+
+                            <Button Content="🎲  Rastgele Sipariş"
+                                    Style="{StaticResource SuccessButton}"
+                                    Click="BtnRandomOrder_Click"
+                                    Margin="0,8,0,4"/>
+
+                            <TextBlock Text="veya harita üzerindeki raflara tıklayın"
+                                       Foreground="{StaticResource BrushTextSecondary}"
+                                       FontFamily="Segoe UI" FontSize="10"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,4,0,4"/>
+
+                            <Button Content="🗑️  Siparişi Temizle"
+                                    Style="{StaticResource DangerButton}"
+                                    Click="BtnClearOrder_Click"
+                                    Margin="0,0,0,8"/>
+
+                            <CheckBox Content="🔥 Isı Haritasını Göster"
+                                      IsChecked="{Binding IsHeatmapVisible}"
+                                      Foreground="{StaticResource BrushTextSecondary}"
+                                      FontFamily="Segoe UI" FontSize="11"
+                                      Margin="0,4,0,0"
+                                      Checked="Heatmap_Changed"
+                                      Unchecked="Heatmap_Changed"/>
+
+                            <!-- Sipariş özeti -->
+                            <Border Background="{StaticResource BrushBackgroundLight}"
+                                    CornerRadius="6" Padding="8" Margin="0,8,0,0"
+                                    Visibility="{Binding HasOrder, Converter={StaticResource BoolToVis}}">
+                                <TextBlock FontFamily="Segoe UI" FontSize="12">
+                                    <Run Text="✅ Seçili Ürün: " Foreground="{StaticResource BrushTextSecondary}"/>
+                                    <Run Text="{Binding CurrentOrder.ItemCount}"
+                                         Foreground="{StaticResource BrushAccentGreen}"
+                                         FontWeight="Bold"/>
+                                </TextBlock>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Algoritma Kartı -->
+                    <Border Style="{StaticResource CardBorder}"
+                            IsEnabled="{Binding HasOrder}">
+                        <StackPanel>
+                            <TextBlock Text="🧮  ROTA HESAPLAMA" Style="{StaticResource SectionHeader}"/>
+
+                            <TextBlock Text="Tüm algoritmalar otomatik çalıştırılır ve karşılaştırılır."
+                                       Foreground="{StaticResource BrushTextSecondary}"
+                                       FontFamily="Segoe UI" FontSize="10"
+                                       TextWrapping="Wrap"
+                                       Margin="0,0,0,8"/>
+
+                            <Button Content="⚡  Tüm Rotaları Hesapla"
+                                    Style="{StaticResource WarningButton}"
+                                    Click="BtnCalculateRoutes_Click"/>
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ===================================== -->
+            <!--  ORTA: Depo Görselleştirme           -->
+            <!-- ===================================== -->
+            <Border Grid.Column="1"
+                    Style="{StaticResource CardBorder}"
+                    Margin="0,0,8,0"
+                    Padding="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="36"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Görselleştirme başlığı -->
+                    <Border Grid.Row="0"
+                            Background="{StaticResource BrushBackgroundLight}"
+                            CornerRadius="10,10,0,0"
+                            Padding="14,8">
+                        <Grid>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="🗺️  DEPO HARİTASI"
+                                           Foreground="{StaticResource BrushAccentBlue}"
+                                           FontFamily="Segoe UI"
+                                           FontWeight="Bold" FontSize="12"/>
+                            </StackPanel>
+
+                            <!-- Legend -->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Rectangle Width="14" Height="14" Fill="#FF2E86AB" RadiusX="2" RadiusY="2" Margin="0,0,4,0"/>
+                                <TextBlock Text="Raf" Foreground="{StaticResource BrushTextSecondary}"
+                                           FontSize="10" Margin="0,0,12,0"/>
+                                <Rectangle Width="14" Height="14" Fill="#FFFF6B35" RadiusX="2" RadiusY="2" Margin="0,0,4,0"/>
+                                <TextBlock Text="Seçili" Foreground="{StaticResource BrushTextSecondary}"
+                                           FontSize="10" Margin="0,0,12,0"/>
+                                <Rectangle Width="14" Height="14" Fill="#FFFF2D2D" RadiusX="2" RadiusY="2" Margin="0,0,4,0"/>
+                                <TextBlock Text="Rota" Foreground="{StaticResource BrushTextSecondary}"
+                                           FontSize="10"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Canvas kapsayıcı -->
+                    <ScrollViewer Grid.Row="1"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Auto"
+                                  Background="{StaticResource BrushBackgroundDark}">
+                        <Canvas x:Name="warehouseCanvas"
+                                Background="{StaticResource BrushBackgroundDark}"
+                                Width="2000" Height="1000">
+                            <!-- Dinamik içerik C# code-behind'dan eklenir -->
+                        </Canvas>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+
+            <!-- ===================================== -->
+            <!--  SAĞ PANEL: Sonuçlar                 -->
+            <!-- ===================================== -->
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Algoritma Sonuçları Kartı -->
+                <Border Grid.Row="0" Style="{StaticResource CardBorder}" Margin="0,0,0,8">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="📊  ALGORİTMA KARŞILAŞTIRMASI"
+                                   Style="{StaticResource SectionHeader}"/>
+
+                        <DataGrid Grid.Row="1"
+                                  x:Name="dgResults"
+                                  Style="{StaticResource ModernDataGrid}"
+                                  ItemsSource="{Binding AlgorithmResults}"
+                                  SelectedItem="{Binding SelectedResult}"
+                                  SelectionChanged="DgResults_SelectionChanged"
+                                  ColumnHeaderStyle="{StaticResource ModernDataGridColumnHeader}">
+                            <DataGrid.Columns>
+                                <!-- En iyi işareti -->
+                                <DataGridTemplateColumn Header="⭐" Width="28">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="🏆"
+                                                       Visibility="{Binding IsBest,
+                                                           Converter={StaticResource BoolToVis}}"
+                                                       HorizontalAlignment="Center"
+                                                       FontSize="13"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <!-- Algoritma adı -->
+                                <DataGridTextColumn Header="Algoritma"
+                                                   Binding="{Binding AlgorithmName}"
+                                                   Width="*">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="{StaticResource BrushTextPrimary}"/>
+                                            <Setter Property="FontSize" Value="11"/>
+                                            <Setter Property="TextWrapping" Value="Wrap"/>
+                                            <Setter Property="Padding" Value="4,3"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <!-- Mesafe -->
+                                <DataGridTextColumn Header="Mesafe"
+                                                   Binding="{Binding TotalDistance, StringFormat={}{0:F1}}"
+                                                   Width="65">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="{StaticResource BrushAccentYellow}"/>
+                                            <Setter Property="FontWeight" Value="Bold"/>
+                                            <Setter Property="FontSize" Value="12"/>
+                                            <Setter Property="TextAlignment" Value="Right"/>
+                                            <Setter Property="Padding" Value="4,3"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+
+                            <!-- Seçili satır rengi -->
+                            <DataGrid.RowStyle>
+                                <Style TargetType="DataGridRow">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsBest}" Value="True">
+                                            <Setter Property="Background" Value="#1A06D6A0"/>
+                                            <Setter Property="BorderBrush" Value="{StaticResource BrushAccentGreen}"/>
+                                        </DataTrigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="#1A2E86AB"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.RowStyle>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+
+                <!-- Seçili Rota Detay Kartı -->
+                <Border Grid.Row="1" Style="{StaticResource CardBorder}"
+                        Visibility="{Binding SelectedResult,
+                            Converter={StaticResource NullToVis}}">
+                    <StackPanel>
+                        <TextBlock Text="🔍  ROTA DETAYI" Style="{StaticResource SectionHeader}"/>
+
+                        <TextBlock x:Name="txtAlgoName"
+                                   Text="{Binding SelectedResult.AlgorithmName}"
+                                   Foreground="{StaticResource BrushTextPrimary}"
+                                   FontFamily="Segoe UI" FontWeight="Bold" FontSize="13"
+                                   TextWrapping="Wrap"/>
+
+                        <TextBlock Text="{Binding SelectedResult.Description}"
+                                   Foreground="{StaticResource BrushTextSecondary}"
+                                   FontFamily="Segoe UI" FontSize="11"
+                                   TextWrapping="Wrap"
+                                   Margin="0,4,0,8"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0" Background="{StaticResource BrushBackgroundLight}"
+                                    CornerRadius="6" Padding="8" Margin="0,0,4,0">
+                                <StackPanel>
+                                    <TextBlock Text="TOPLAM MESAFE"
+                                               Foreground="{StaticResource BrushTextSecondary}"
+                                               FontSize="9" FontFamily="Segoe UI"/>
+                                    <TextBlock Text="{Binding SelectedResult.TotalDistance, StringFormat={}{0:F2} birim}"
+                                               Foreground="{StaticResource BrushAccentYellow}"
+                                               FontWeight="Bold" FontSize="14"
+                                               FontFamily="Segoe UI"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="1" Background="{StaticResource BrushBackgroundLight}"
+                                    CornerRadius="6" Padding="8" Margin="4,0,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="HESAPLAMA SÜRESİ"
+                                               Foreground="{StaticResource BrushTextSecondary}"
+                                               FontSize="9" FontFamily="Segoe UI"/>
+                                    <TextBlock Text="{Binding SelectedResult.ComputationTimeMs, StringFormat={}{0:F1} ms}"
+                                               Foreground="{StaticResource BrushAccentGreen}"
+                                               FontWeight="Bold" FontSize="14"
+                                               FontFamily="Segoe UI"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <Button Content="🎨  Bu Rotayı Göster"
+                                Style="{StaticResource PrimaryButton}"
+                                Click="BtnShowRoute_Click"
+                                Margin="0,10,0,0"/>
+
+                        <!-- Sipariş sırası listesi -->
+                        <TextBlock Text="Toplama Sırası:" Style="{StaticResource FieldLabel}" Margin="0,8,0,2"/>
+                        <ListBox x:Name="lbPickOrder"
+                                 ItemsSource="{Binding SelectedResult.PickOrder}"
+                                 Background="{StaticResource BrushBackgroundLight}"
+                                 BorderThickness="0"
+                                 MaxHeight="140"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontFamily="Segoe UI" FontSize="11"
+                                               Foreground="{StaticResource BrushTextSecondary}">
+                                        <Run Text="{Binding PickSequence}" Foreground="{StaticResource BrushAccentBlue}" FontWeight="Bold"/>
+                                        <Run Text=". "/>
+                                        <Run Text="{Binding Location.Label}"/>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="Padding" Value="4,2"/>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListBox>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <!-- ========================================= -->
+        <!--  DURUM BARI                              -->
+        <!-- ========================================= -->
+        <Border Grid.Row="2"
+                Background="{StaticResource BrushBackgroundMid}"
+                BorderBrush="{StaticResource BrushBorder}"
+                BorderThickness="0,1,0,0">
+            <Grid Margin="16,0">
+                <TextBlock Text="{Binding StatusMessage}"
+                           Foreground="{StaticResource BrushTextSecondary}"
+                           FontFamily="Segoe UI" FontSize="11"
+                           VerticalAlignment="Center"/>
+                <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center"
+                           Foreground="{StaticResource BrushTextSecondary}"
+                           FontFamily="Segoe UI" FontSize="10">
+                    <Run Text="Roodbergen IWS · "/>
+                    <Run Text="5 Algoritma"/>
+                </TextBlock>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
