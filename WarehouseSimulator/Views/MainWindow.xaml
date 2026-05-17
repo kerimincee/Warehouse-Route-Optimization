@@ -66,11 +66,11 @@
                         <TextBlock Foreground="{StaticResource BrushAccentBlue}"
                                    FontFamily="Segoe UI" FontSize="12">
                             <Run Text="🔷 Blok: "/>
-                            <Run Text="{Binding BlockCount}"/>
+                            <Run Text="{Binding BlockCount, Mode=OneWay}"/>
                             <Run Text=" | Koridor: "/>
-                            <Run Text="{Binding AislesPerBlock}"/>
+                            <Run Text="{Binding AislesPerBlock, Mode=OneWay}"/>
                             <Run Text=" | Raf/Koridor: "/>
-                            <Run Text="{Binding ShelvesPerAisle}"/>
+                            <Run Text="{Binding ShelvesPerAisle, Mode=OneWay}"/>
                         </TextBlock>
                     </Border>
                 </StackPanel>
@@ -184,7 +184,7 @@
                                     Visibility="{Binding HasOrder, Converter={StaticResource BoolToVis}}">
                                 <TextBlock FontFamily="Segoe UI" FontSize="12">
                                     <Run Text="✅ Seçili Ürün: " Foreground="{StaticResource BrushTextSecondary}"/>
-                                    <Run Text="{Binding CurrentOrder.ItemCount}"
+                                    <Run Text="{Binding CurrentOrder.ItemCount, Mode=OneWay}"
                                          Foreground="{StaticResource BrushAccentGreen}"
                                          FontWeight="Bold"/>
                                 </TextBlock>
@@ -426,9 +426,9 @@
                                 <DataTemplate>
                                     <TextBlock FontFamily="Segoe UI" FontSize="11"
                                                Foreground="{StaticResource BrushTextSecondary}">
-                                        <Run Text="{Binding PickSequence}" Foreground="{StaticResource BrushAccentBlue}" FontWeight="Bold"/>
+                                        <Run Text="{Binding PickSequence, Mode=OneWay}" Foreground="{StaticResource BrushAccentBlue}" FontWeight="Bold"/>
                                         <Run Text=". "/>
-                                        <Run Text="{Binding Location.Label}"/>
+                                        <Run Text="{Binding Location.Label, Mode=OneWay}"/>
                                     </TextBlock>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
