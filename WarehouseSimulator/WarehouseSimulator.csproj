@@ -8,6 +8,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <!-- WPF'i etkinleştir -->
     <UseWPF>true</UseWPF>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <AssemblyName>WarehouseSimulator</AssemblyName>
     <RootNamespace>WarehouseSimulator</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>

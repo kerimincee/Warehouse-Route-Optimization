@@ -83,9 +83,6 @@ namespace WarehouseSimulator.Views
         private void BtnCalculateRoutes_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.CalculateAllRoutes();
-            // İlk sonucu otomatik göster
-            if (ViewModel.SelectedResult != null && ViewModel.Warehouse != null)
-                DrawRoute(ViewModel.SelectedResult, ViewModel.Warehouse);
         }
 
         /// <summary>Bu Rotayı Göster butonu</summary>

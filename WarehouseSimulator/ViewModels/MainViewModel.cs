@@ -223,6 +223,8 @@ namespace WarehouseSimulator.ViewModels
                 });
             }
 
+            HasOrder = CurrentOrder.ItemCount > 0;
+
             AlgorithmResults.Clear();
             SelectedResult = null;
             StatusMessage = $"✓ {count} ürünlük sipariş oluşturuldu. " +
