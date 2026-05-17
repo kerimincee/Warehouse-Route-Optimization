@@ -88,15 +88,17 @@ namespace WarehouseSimulator.Views
         /// <summary>Bu Rotayı Göster butonu</summary>
         private void BtnShowRoute_Click(object sender, RoutedEventArgs e)
         {
-            if (ViewModel.SelectedResult != null && ViewModel.Warehouse != null)
-                DrawRoute(ViewModel.SelectedResult, ViewModel.Warehouse);
+            var viewModel = DataContext as MainViewModel;
+            if (viewModel?.SelectedResult != null && viewModel.Warehouse != null)
+                DrawRoute(viewModel.SelectedResult, viewModel.Warehouse);
         }
 
         /// <summary>DataGrid seçim değiştiğinde rotayı güncelle</summary>
         private void DgResults_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ViewModel.SelectedResult != null && ViewModel.Warehouse != null)
-                DrawRoute(ViewModel.SelectedResult, ViewModel.Warehouse);
+            var viewModel = DataContext as MainViewModel;
+            if (viewModel?.SelectedResult != null && viewModel.Warehouse != null)
+                DrawRoute(viewModel.SelectedResult, viewModel.Warehouse);
         }
 
         // =========================================================
@@ -405,18 +407,18 @@ namespace WarehouseSimulator.Views
 
                 double scale = blockUnitWidth > 0 ? blockPixelWidth / blockUnitWidth : 1.0;
 
-                double px = WarehouseBuilder.MARGIN + p.X * scale;
-                double py;
+                double calcX = WarehouseBuilder.MARGIN + p.X * scale;
+                double calcY;
 
                 if (p.Y < 0)
                 {
                     // Kapı: rafların üstünde
-                    py = WarehouseBuilder.MARGIN - WarehouseBuilder.CROSS_AISLE_PIXEL_HEIGHT / 2;
+                    calcY = WarehouseBuilder.MARGIN - WarehouseBuilder.CROSS_AISLE_PIXEL_HEIGHT / 2;
                 }
                 else if (p.Y > warehouse.AisleLength - 0.01)
                 {
                     // Üst geçiş
-                    py = WarehouseBuilder.MARGIN +
+                    calcY = WarehouseBuilder.MARGIN +
                          warehouse.ShelvesPerAisle * WarehouseBuilder.SHELF_PIXEL_HEIGHT +
                          WarehouseBuilder.CROSS_AISLE_PIXEL_HEIGHT / 2;
                 }
@@ -425,10 +427,10 @@ namespace WarehouseSimulator.Views
                     // Raf içi: birim Y'yi piksel Y'ye çevir
                     double rowScale = WarehouseBuilder.SHELF_PIXEL_HEIGHT;
                     double unitPerRow = warehouse.AisleLength / warehouse.ShelvesPerAisle;
-                    py = WarehouseBuilder.MARGIN + (p.Y / unitPerRow) * rowScale + rowScale / 2;
+                    calcY = WarehouseBuilder.MARGIN + (p.Y / unitPerRow) * rowScale + rowScale / 2;
                 }
 
-                return (px, py);
+                return (calcX, calcY);
             }
 
             // Rota çizgilerini çiz
@@ -448,13 +450,6 @@ namespace WarehouseSimulator.Views
                     StrokeStartLineCap = PenLineCap.Round,
                     StrokeEndLineCap = PenLineCap.Round
                 };
-
-                // Solma animasyonu (fade-in)
-                var anim = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(300 + i * 30))
-                {
-                    EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-                };
-                line.BeginAnimation(OpacityProperty, anim);
 
                 Canvas.SetZIndex(line, 10);
                 warehouseCanvas.Children.Add(line);
@@ -538,8 +533,7 @@ namespace WarehouseSimulator.Views
                             : Color.FromRgb(0x2E, 0x86, 0xAB); // Mavi (Normal)
                     }
 
-                    var anim = new ColorAnimation(targetColor, TimeSpan.FromMilliseconds(200));
-                    ((SolidColorBrush)rect.Fill).BeginAnimation(SolidColorBrush.ColorProperty, anim);
+                    rect.Fill = new SolidColorBrush(targetColor);
                 }
             }
         }
