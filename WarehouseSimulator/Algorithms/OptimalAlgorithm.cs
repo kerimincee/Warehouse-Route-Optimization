@@ -65,26 +65,6 @@ namespace WarehouseSimulator.Algorithms
             };
         }
 
-        private void AddWarehousePath(List<WarehousePoint> route,
-            WarehousePoint from, WarehousePoint to, Warehouse warehouse)
-        {
-            if (Math.Abs(from.X - to.X) < 0.01)
-            {
-                route.Add(to);
-                return;
-            }
-
-            double crossY = from.Y > warehouse.AisleLength / 2
-                ? warehouse.AisleLength
-                : 0;
-
-            var crossFrom = new WarehousePoint(from.X, crossY, "Geçiş-Ara");
-            var crossTo = new WarehousePoint(to.X, crossY, "Geçiş-Hedef");
-
-            route.Add(crossFrom);
-            route.Add(crossTo);
-            route.Add(to);
-        }
     }
 
     public class TwoOptTSPAlgorithm : RoutingAlgorithm
@@ -112,10 +92,13 @@ namespace WarehouseSimulator.Algorithms
 
             var routePoints = new List<WarehousePoint> { door };
             var pickOrder = new List<OrderItem>();
+            var current = door;
 
             for (int i = 1; i < tour.Count - 1; i++)
             {
-                routePoints.Add(tour[i]);
+                AddWarehousePath(routePoints, current, tour[i], warehouse);
+                current = tour[i];
+
                 var matchingShelf = selectedShelves
                     .OrderBy(s => WarehouseBuilder.GetShelfPickPoint(s, warehouse)
                         .ManhattanDistanceTo(tour[i]))
@@ -129,7 +112,7 @@ namespace WarehouseSimulator.Algorithms
                 });
             }
 
-            routePoints.Add(door);
+            AddWarehousePath(routePoints, current, door, warehouse);
 
             return new RouteResult
             {

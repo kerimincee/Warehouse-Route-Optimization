@@ -63,11 +63,11 @@
                             CornerRadius="20" Padding="12,4" Margin="8,0">
                         <TextBlock Foreground="{StaticResource BrushAccentBlue}"
                                    FontFamily="Segoe UI" FontSize="12">
-                            <Run Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[HeaderBlock]}"/>
+                            <Run Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[HeaderBlock], Mode=OneWay}"/>
                             <Run Text="{Binding BlockCount, Mode=OneWay}"/>
-                            <Run Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[HeaderAisle]}"/>
+                            <Run Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[HeaderAisle], Mode=OneWay}"/>
                             <Run Text="{Binding AislesPerBlock, Mode=OneWay}"/>
-                            <Run Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[HeaderShelfPerAisle]}"/>
+                            <Run Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[HeaderShelfPerAisle], Mode=OneWay}"/>
                             <Run Text="{Binding ShelvesPerAisle, Mode=OneWay}"/>
                         </TextBlock>
                     </Border>
@@ -120,15 +120,16 @@
                             <!-- Optional: Distance parameters -->
                             <Expander Header="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[DistanceParameters]}"
                                       Foreground="{StaticResource BrushTextSecondary}"
-                                      Margin="0,6,0,0">
+                                      Margin="0,6,0,0"
+                                      IsExpanded="True">
                                 <StackPanel Margin="0,4,0,0">
                                     <TextBlock Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[AisleLength]}" Style="{StaticResource FieldLabel}"/>
-                                    <TextBox Style="{StaticResource ModernTextBox}"
-                                             Text="{Binding AisleLength, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBox x:Name="txtAisleLength" Style="{StaticResource ModernTextBox}"
+                                             Text="{Binding AisleLength, UpdateSourceTrigger=LostFocus}"/>
 
                                     <TextBlock Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[CrossAisleDistance]}" Style="{StaticResource FieldLabel}"/>
-                                    <TextBox Style="{StaticResource ModernTextBox}"
-                                             Text="{Binding CrossAisleDistance, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBox x:Name="txtCrossAisleDist" Style="{StaticResource ModernTextBox}"
+                                             Text="{Binding CrossAisleDistance, UpdateSourceTrigger=LostFocus}"/>
                                 </StackPanel>
                             </Expander>
 
@@ -178,7 +179,7 @@
                                     CornerRadius="6" Padding="8" Margin="0,8,0,0"
                                     Visibility="{Binding HasOrder, Converter={StaticResource BoolToVis}}">
                                 <TextBlock FontFamily="Segoe UI" FontSize="12">
-                                    <Run Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[SelectedProduct]}" Foreground="{StaticResource BrushTextSecondary}"/>
+                                    <Run Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[SelectedProduct], Mode=OneWay}" Foreground="{StaticResource BrushTextSecondary}"/>
                                     <Run Text="{Binding CurrentOrder.ItemCount, Mode=OneWay}"
                                          Foreground="{StaticResource BrushAccentGreen}"
                                          FontWeight="Bold"/>
@@ -250,9 +251,10 @@
                     </Border>
 
                     <!-- Canvas container -->
-                    <ScrollViewer Grid.Row="1"
-                                  HorizontalScrollBarVisibility="Auto"
-                                  VerticalScrollBarVisibility="Auto"
+                    <ScrollViewer x:Name="canvasScrollViewer"
+                                  Grid.Row="1"
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  VerticalScrollBarVisibility="Disabled"
                                   Background="{StaticResource BrushBackgroundDark}">
                         <Canvas x:Name="warehouseCanvas"
                                 Background="{StaticResource BrushBackgroundDark}"
@@ -382,7 +384,7 @@
                                                FontWeight="Bold" FontSize="14"
                                                FontFamily="Segoe UI">
                                         <Run Text="{Binding SelectedResult.TotalDistance, StringFormat={}{0:F2}}"/>
-                                        <Run Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[UnitDistance]}"/>
+                                        <Run Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[UnitDistance], Mode=OneWay}"/>
                                     </TextBlock>
                                 </StackPanel>
                             </Border>
@@ -397,7 +399,7 @@
                                                FontWeight="Bold" FontSize="14"
                                                FontFamily="Segoe UI">
                                         <Run Text="{Binding SelectedResult.ComputationTimeMs, StringFormat={}{0:F1}}"/>
-                                        <Run Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[UnitMs]}"/>
+                                        <Run Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[UnitMs], Mode=OneWay}"/>
                                     </TextBlock>
                                 </StackPanel>
                             </Border>
@@ -454,8 +456,8 @@
                     <TextBlock Foreground="{StaticResource BrushTextSecondary}"
                                FontFamily="Segoe UI" FontSize="10"
                                VerticalAlignment="Center">
-                        <Run Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[FooterText]}"/>
-                        <Run Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[FooterAlgorithms]}"/>
+                        <Run Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[FooterText], Mode=OneWay}"/>
+                        <Run Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[FooterAlgorithms], Mode=OneWay}"/>
                     </TextBlock>
                     <!-- Language Switcher -->
                     <ComboBox x:Name="cmbLanguage" SelectedIndex="0"
@@ -464,10 +466,19 @@
                               BorderBrush="{StaticResource BrushBorder}"
                               FontFamily="Segoe UI" FontSize="10"
                               Padding="4,2" Margin="12,0,0,0"
-                              Width="90"
+                              Width="130"
                               SelectionChanged="CmbLanguage_SelectionChanged">
+                        <ComboBox.ItemContainerStyle>
+                            <Style TargetType="ComboBoxItem">
+                                <Setter Property="Foreground" Value="{StaticResource BrushTextPrimary}"/>
+                                <Setter Property="Background" Value="{StaticResource BrushBackgroundLight}"/>
+                            </Style>
+                        </ComboBox.ItemContainerStyle>
                         <ComboBoxItem Content="🇹🇷 Türkçe"/>
                         <ComboBoxItem Content="🇬🇧 English"/>
+                        <ComboBoxItem Content="🇩🇪 Deutsch"/>
+                        <ComboBoxItem Content="🇮🇹 Italiano"/>
+                        <ComboBoxItem Content="🇪🇸 Español"/>
                     </ComboBox>
                 </StackPanel>
             </Grid>

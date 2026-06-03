@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using WarehouseSimulator.Helpers;
 using WarehouseSimulator.Models;
@@ -29,6 +30,7 @@ namespace WarehouseSimulator.Views
 
         private readonly Dictionary<string, Rectangle> _shelfRects = new();
         private readonly List<UIElement> _routeElements = new();
+        private Storyboard? _routeStoryboard;
 
         public MainWindow()
         {
@@ -37,10 +39,18 @@ namespace WarehouseSimulator.Views
 
         private void CmbLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (cmbLanguage.SelectedIndex == 0)
-                TranslationSource.Instance.SetLanguage("tr-TR");
-            else
-                TranslationSource.Instance.SetLanguage("en-US");
+            var culture = cmbLanguage.SelectedIndex switch
+            {
+                0 => "tr-TR",
+                1 => "en-US",
+                2 => "de-DE",
+                3 => "it-IT",
+                _ => "es-ES"
+            };
+            TranslationSource.Instance.SetLanguage(culture);
+
+            if (ViewModel.Warehouse != null)
+                DrawWarehouse(ViewModel.Warehouse);
         }
 
         private void BtnBuildWarehouse_Click(object sender, RoutedEventArgs e)
@@ -93,6 +103,7 @@ namespace WarehouseSimulator.Views
         private void DrawWarehouse(Warehouse warehouse)
         {
             warehouseCanvas.Children.Clear();
+            warehouseCanvas.LayoutTransform = null;
             _shelfRects.Clear();
             _routeElements.Clear();
 
@@ -102,6 +113,8 @@ namespace WarehouseSimulator.Views
             warehouseCanvas.Width  = totalWidth  + WarehouseBuilder.MARGIN * 2 + 100;
             warehouseCanvas.Height = totalHeight + WarehouseBuilder.MARGIN * 2 + 80;
 
+            this.WindowState = WindowState.Maximized;
+
             DrawBackgroundGrid(warehouse);
 
             foreach (var block in warehouse.Blocks)
@@ -109,6 +122,28 @@ namespace WarehouseSimulator.Views
 
             DrawDoor(warehouse);
             DrawLabels(warehouse);
+
+            this.Dispatcher.BeginInvoke(new Action(FitWarehouseToView),
+                System.Windows.Threading.DispatcherPriority.Loaded);
+        }
+
+        private void FitWarehouseToView()
+        {
+            double availableWidth  = canvasScrollViewer.ActualWidth;
+            double availableHeight = canvasScrollViewer.ActualHeight;
+
+            if (availableWidth <= 0 || availableHeight <= 0 ||
+                warehouseCanvas.Width <= 0 || warehouseCanvas.Height <= 0)
+                return;
+
+            double scaleX = availableWidth / warehouseCanvas.Width;
+            double scaleY = availableHeight / warehouseCanvas.Height;
+            double scale = Math.Min(scaleX, scaleY) * 0.96;
+
+            if (scale < 1.0)
+            {
+                warehouseCanvas.LayoutTransform = new ScaleTransform(scale, scale);
+            }
         }
 
         private void DrawBackgroundGrid(Warehouse warehouse)
@@ -116,7 +151,8 @@ namespace WarehouseSimulator.Views
             double cW = warehouseCanvas.Width;
             double cH = warehouseCanvas.Height;
 
-            for (double y = WarehouseBuilder.MARGIN; y < cH - 20; y += WarehouseBuilder.SHELF_PIXEL_HEIGHT)
+            double spH = WarehouseBuilder.GetShelfPixelHeight(warehouse);
+            for (double y = WarehouseBuilder.MARGIN; y < cH - 20; y += spH)
             {
                 var line = new Line
                 {
@@ -129,13 +165,15 @@ namespace WarehouseSimulator.Views
 
         private void DrawBlock(Block block, Warehouse warehouse)
         {
+            double spH = WarehouseBuilder.GetShelfPixelHeight(warehouse);
+            double cpH = WarehouseBuilder.GetCrossAislePixelHeight(warehouse);
             double blockGroupWidth = warehouse.AislesPerBlock *
                                      (WarehouseBuilder.SHELF_PIXEL_WIDTH * 2 + WarehouseBuilder.AISLE_PIXEL_WIDTH);
 
             double blockStartX = WarehouseBuilder.MARGIN +
-                                 block.BlockIndex * (blockGroupWidth + WarehouseBuilder.CROSS_AISLE_PIXEL_HEIGHT * 2);
+                                 block.BlockIndex * (blockGroupWidth + cpH * 2);
 
-            double blockHeight = warehouse.ShelvesPerAisle * WarehouseBuilder.SHELF_PIXEL_HEIGHT;
+            double blockHeight = warehouse.ShelvesPerAisle * spH;
 
             var blockRect = new Rectangle
             {
@@ -155,7 +193,7 @@ namespace WarehouseSimulator.Views
                 LanguageResources.Format("BlockLabel", block.BlockIndex + 1),
                 Color.FromRgb(0x2E, 0x86, 0xAB), 11, FontWeights.Bold);
             Canvas.SetLeft(blockLabel, blockStartX + blockGroupWidth / 2 - 25);
-            Canvas.SetTop(blockLabel, WarehouseBuilder.MARGIN - 22);
+            Canvas.SetTop(blockLabel, WarehouseBuilder.MARGIN - spH);
             warehouseCanvas.Children.Add(blockLabel);
 
             foreach (var aisle in block.Aisles)
@@ -167,13 +205,14 @@ namespace WarehouseSimulator.Views
 
         private void DrawAisle(Aisle aisle, double blockStartX, Warehouse warehouse)
         {
+            double spH = WarehouseBuilder.GetShelfPixelHeight(warehouse);
             double aisleGroupWidth = WarehouseBuilder.SHELF_PIXEL_WIDTH * 2 + WarehouseBuilder.AISLE_PIXEL_WIDTH;
             double aisleX = blockStartX + aisle.AisleIndex * aisleGroupWidth;
 
             var aisleBg = new Rectangle
             {
                 Width  = WarehouseBuilder.AISLE_PIXEL_WIDTH,
-                Height = warehouse.ShelvesPerAisle * WarehouseBuilder.SHELF_PIXEL_HEIGHT,
+                Height = warehouse.ShelvesPerAisle * spH,
                 Fill   = AISLE_BG
             };
             Canvas.SetLeft(aisleBg, aisleX + WarehouseBuilder.SHELF_PIXEL_WIDTH);
@@ -186,7 +225,7 @@ namespace WarehouseSimulator.Views
             Canvas.SetLeft(aisleLabel,
                 aisleX + WarehouseBuilder.SHELF_PIXEL_WIDTH + WarehouseBuilder.AISLE_PIXEL_WIDTH / 2 - 8);
             Canvas.SetTop(aisleLabel,
-                WarehouseBuilder.MARGIN + warehouse.ShelvesPerAisle * WarehouseBuilder.SHELF_PIXEL_HEIGHT + 3);
+                WarehouseBuilder.MARGIN + warehouse.ShelvesPerAisle * spH + 3);
             warehouseCanvas.Children.Add(aisleLabel);
 
             foreach (var shelf in aisle.Shelves)
@@ -195,6 +234,7 @@ namespace WarehouseSimulator.Views
 
         private void DrawShelf(ShelfLocation shelf, double aisleX, Warehouse warehouse)
         {
+            double spH = WarehouseBuilder.GetShelfPixelHeight(warehouse);
             double shelfX, shelfY;
 
             if (shelf.Side == 0)
@@ -202,12 +242,12 @@ namespace WarehouseSimulator.Views
             else
                 shelfX = aisleX + WarehouseBuilder.SHELF_PIXEL_WIDTH + WarehouseBuilder.AISLE_PIXEL_WIDTH;
 
-            shelfY = WarehouseBuilder.MARGIN + shelf.ShelfRow * WarehouseBuilder.SHELF_PIXEL_HEIGHT;
+            shelfY = WarehouseBuilder.MARGIN + shelf.ShelfRow * spH;
 
             var rect = new Rectangle
             {
                 Width  = WarehouseBuilder.SHELF_PIXEL_WIDTH - 2,
-                Height = WarehouseBuilder.SHELF_PIXEL_HEIGHT - 2,
+                Height = spH - 2,
                 Fill   = shelf.IsSelected ? SHELF_SELECTED : SHELF_NORMAL,
                 RadiusX = 3, RadiusY = 3,
                 Cursor = Cursors.Hand,
@@ -243,7 +283,7 @@ namespace WarehouseSimulator.Views
             Canvas.SetLeft(rect, shelfX + 1);
             Canvas.SetTop(rect, shelfY + 1);
 
-            if (WarehouseBuilder.SHELF_PIXEL_HEIGHT >= 18)
+            if (spH >= 18)
             {
                 var label = new TextBlock
                 {
@@ -254,7 +294,7 @@ namespace WarehouseSimulator.Views
                     IsHitTestVisible = false
                 };
                 Canvas.SetLeft(label, shelfX + WarehouseBuilder.SHELF_PIXEL_WIDTH / 2 - 4);
-                Canvas.SetTop(label, shelfY + WarehouseBuilder.SHELF_PIXEL_HEIGHT / 2 - 5);
+                Canvas.SetTop(label, shelfY + spH / 2 - 5);
                 warehouseCanvas.Children.Add(label);
             }
 
@@ -264,14 +304,16 @@ namespace WarehouseSimulator.Views
 
         private void DrawCrossAisle(double blockStartX, double blockGroupWidth, Warehouse warehouse, string position)
         {
+            double spH = WarehouseBuilder.GetShelfPixelHeight(warehouse);
+            double cpH = WarehouseBuilder.GetCrossAislePixelHeight(warehouse);
             double y = position == "bottom"
-                ? WarehouseBuilder.MARGIN + warehouse.ShelvesPerAisle * WarehouseBuilder.SHELF_PIXEL_HEIGHT
-                : WarehouseBuilder.MARGIN - WarehouseBuilder.CROSS_AISLE_PIXEL_HEIGHT;
+                ? WarehouseBuilder.MARGIN + warehouse.ShelvesPerAisle * spH
+                : WarehouseBuilder.MARGIN - cpH;
 
             var crossRect = new Rectangle
             {
                 Width  = blockGroupWidth,
-                Height = WarehouseBuilder.CROSS_AISLE_PIXEL_HEIGHT,
+                Height = cpH,
                 Fill   = new SolidColorBrush(Color.FromArgb(0x20, 0x06, 0xD6, 0xA0))
             };
             Canvas.SetLeft(crossRect, blockStartX);
@@ -322,6 +364,8 @@ namespace WarehouseSimulator.Views
 
         private void DrawLabels(Warehouse warehouse)
         {
+            double spH = WarehouseBuilder.GetShelfPixelHeight(warehouse);
+            double cpH = WarehouseBuilder.GetCrossAislePixelHeight(warehouse);
             var summary = CreateLabel(
                 LanguageResources.Format("SummaryFormat",
                     warehouse.TotalShelves, warehouse.TotalAisles, warehouse.BlockCount),
@@ -329,8 +373,8 @@ namespace WarehouseSimulator.Views
             Canvas.SetLeft(summary, WarehouseBuilder.MARGIN);
             Canvas.SetTop(summary,
                 WarehouseBuilder.MARGIN +
-                warehouse.ShelvesPerAisle * WarehouseBuilder.SHELF_PIXEL_HEIGHT +
-                WarehouseBuilder.CROSS_AISLE_PIXEL_HEIGHT + 5);
+                warehouse.ShelvesPerAisle * spH +
+                cpH + 5);
             warehouseCanvas.Children.Add(summary);
         }
 
@@ -342,31 +386,53 @@ namespace WarehouseSimulator.Views
 
             (double px, double py) ToPixel(WarehousePoint p)
             {
+                double spH = WarehouseBuilder.GetShelfPixelHeight(warehouse);
+                double cpH = WarehouseBuilder.GetCrossAislePixelHeight(warehouse);
                 double aisleGroupUnit = warehouse.ShelfWidth * 2 + 1.0;
                 double aisleGroupPixel = WarehouseBuilder.SHELF_PIXEL_WIDTH * 2 + WarehouseBuilder.AISLE_PIXEL_WIDTH;
                 double blockUnitWidth = warehouse.AislesPerBlock * aisleGroupUnit;
                 double blockPixelWidth = warehouse.AislesPerBlock * aisleGroupPixel;
+                double totalBlockUnit = blockUnitWidth + warehouse.CrossAisleDistance;
 
-                double scale = blockUnitWidth > 0 ? blockPixelWidth / blockUnitWidth : 1.0;
-
-                double calcX = WarehouseBuilder.MARGIN + p.X * scale;
+                double calcX;
                 double calcY;
 
                 if (p.Y < 0)
                 {
-                    calcY = WarehouseBuilder.MARGIN - WarehouseBuilder.CROSS_AISLE_PIXEL_HEIGHT / 2;
-                }
-                else if (p.Y > warehouse.AisleLength - 0.01)
-                {
-                    calcY = WarehouseBuilder.MARGIN +
-                         warehouse.ShelvesPerAisle * WarehouseBuilder.SHELF_PIXEL_HEIGHT +
-                         WarehouseBuilder.CROSS_AISLE_PIXEL_HEIGHT / 2;
+                    var (doorX, doorY) = WarehouseBuilder.GetDoorPixelPosition(warehouse);
+                    calcX = doorX;
+                    calcY = doorY;
                 }
                 else
                 {
-                    double rowScale = WarehouseBuilder.SHELF_PIXEL_HEIGHT;
-                    double unitPerRow = warehouse.AisleLength / warehouse.ShelvesPerAisle;
-                    calcY = WarehouseBuilder.MARGIN + (p.Y / unitPerRow) * rowScale + rowScale / 2;
+                    int blockIndex = (int)(p.X / totalBlockUnit);
+                    double xInBlock = p.X - blockIndex * totalBlockUnit;
+                    if (xInBlock < 0) xInBlock = 0;
+                    if (xInBlock > blockUnitWidth) xInBlock = blockUnitWidth;
+
+                    int aisleIndex = (int)(xInBlock / aisleGroupUnit);
+
+                    double blockStartX = WarehouseBuilder.MARGIN
+                        + blockIndex * (blockPixelWidth + cpH * 2);
+                    double aisleStartX = blockStartX + aisleIndex * aisleGroupPixel;
+
+                    calcX = aisleStartX + WarehouseBuilder.SHELF_PIXEL_WIDTH + WarehouseBuilder.AISLE_PIXEL_WIDTH / 2;
+
+                    if (p.Y < 0.01)
+                    {
+                        calcY = WarehouseBuilder.MARGIN - cpH / 2;
+                    }
+                    else if (p.Y > warehouse.AisleLength - 0.01)
+                    {
+                        calcY = WarehouseBuilder.MARGIN
+                              + warehouse.ShelvesPerAisle * spH
+                              + cpH / 2;
+                    }
+                    else
+                    {
+                        double unitPerRow = warehouse.AisleLength / warehouse.ShelvesPerAisle;
+                        calcY = WarehouseBuilder.MARGIN + (p.Y / unitPerRow) * spH;
+                    }
                 }
 
                 return (calcX, calcY);
@@ -428,13 +494,40 @@ namespace WarehouseSimulator.Views
 
                 seq++;
             }
+
+            AnimateRouteLines();
         }
 
         private void ClearRouteVisualization()
         {
+            _routeStoryboard?.Stop();
+            _routeStoryboard = null;
             foreach (var elem in _routeElements)
                 warehouseCanvas.Children.Remove(elem);
             _routeElements.Clear();
+        }
+
+        private void AnimateRouteLines()
+        {
+            _routeStoryboard?.Stop();
+            _routeStoryboard = new Storyboard();
+            var duration = new Duration(TimeSpan.FromSeconds(1.2));
+
+            foreach (var line in _routeElements.OfType<Line>())
+            {
+                var anim = new DoubleAnimation
+                {
+                    From = 0,
+                    To = -9,
+                    Duration = duration,
+                    RepeatBehavior = RepeatBehavior.Forever
+                };
+                Storyboard.SetTarget(anim, line);
+                Storyboard.SetTargetProperty(anim, new PropertyPath("StrokeDashOffset"));
+                _routeStoryboard.Children.Add(anim);
+            }
+
+            _routeStoryboard.Begin();
         }
 
         private void RefreshShelfColors(Warehouse warehouse)

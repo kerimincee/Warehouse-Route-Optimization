@@ -167,14 +167,34 @@ namespace WarehouseSimulator.Helpers
         public static (double X, double Y) GetDoorPixelPosition(Warehouse warehouse)
         {
             double totalWidth = CalculateTotalPixelWidth(warehouse);
+            double crossH = GetCrossAislePixelHeight(warehouse);
+            double doorY = MARGIN - crossH / 2;
 
             return warehouse.DoorLocation switch
             {
-                DoorLocation.Left => (MARGIN, MARGIN - 25),
-                DoorLocation.Right => (MARGIN + totalWidth, MARGIN - 25),
-                DoorLocation.Center => (MARGIN + totalWidth / 2, MARGIN - 25),
-                _ => (MARGIN, MARGIN - 25)
+                DoorLocation.Left => (MARGIN, doorY),
+                DoorLocation.Right => (MARGIN + totalWidth, doorY),
+                DoorLocation.Center => (MARGIN + totalWidth / 2, doorY),
+                _ => (MARGIN, doorY)
             };
+        }
+
+        /// <summary>
+        /// Her raf sırasının piksel yüksekliğini, AisleLength ve ShelvesPerAisle değerlerine göre hesaplar.
+        /// </summary>
+        public static double GetShelfPixelHeight(Warehouse warehouse)
+        {
+            double defaultUnitPerRow = 10.0 / 8.0;
+            double actualUnitPerRow = warehouse.AisleLength / warehouse.ShelvesPerAisle;
+            return SHELF_PIXEL_HEIGHT * (actualUnitPerRow / defaultUnitPerRow);
+        }
+
+        /// <summary>
+        /// Geçiş koridoru piksel yüksekliğini CrossAisleDistance değerine göre hesaplar.
+        /// </summary>
+        public static double GetCrossAislePixelHeight(Warehouse warehouse)
+        {
+            return CROSS_AISLE_PIXEL_HEIGHT * (warehouse.CrossAisleDistance / 3.0);
         }
 
         /// <summary>
@@ -184,7 +204,8 @@ namespace WarehouseSimulator.Helpers
         {
             double blockWidth = warehouse.AislesPerBlock *
                                 (SHELF_PIXEL_WIDTH + AISLE_PIXEL_WIDTH + SHELF_PIXEL_WIDTH);
-            return warehouse.BlockCount * (blockWidth + CROSS_AISLE_PIXEL_HEIGHT * 2) - CROSS_AISLE_PIXEL_HEIGHT * 2;
+            double crossW = GetCrossAislePixelHeight(warehouse) * 2;
+            return warehouse.BlockCount * (blockWidth + crossW) - crossW;
         }
 
         /// <summary>
@@ -192,7 +213,9 @@ namespace WarehouseSimulator.Helpers
         /// </summary>
         public static double CalculateTotalPixelHeight(Warehouse warehouse)
         {
-            return warehouse.ShelvesPerAisle * SHELF_PIXEL_HEIGHT + MARGIN * 2;
+            double shelfH = GetShelfPixelHeight(warehouse);
+            double crossH = GetCrossAislePixelHeight(warehouse);
+            return warehouse.ShelvesPerAisle * shelfH + 2 * crossH + MARGIN * 2;
         }
 
         /// <summary>
@@ -201,18 +224,13 @@ namespace WarehouseSimulator.Helpers
         /// </summary>
         public static WarehousePoint GetShelfPickPoint(ShelfLocation shelf, Warehouse warehouse)
         {
-            // Toplayıcı rafın önünden geçerken ürünü alır
-            // X: koridorun orta çizgisi, Y: rafın konumu
-
-            int globalAisleIndex = shelf.BlockIndex * warehouse.AislesPerBlock + shelf.AisleIndex;
-
-            // Her koridor grubu 3 birim: 1 (sol raf) + 1 (koridor) + 1 (sağ raf)
             double aisleGroupSize = warehouse.ShelfWidth * 2 + 1.0;
             double blockOffset = shelf.BlockIndex * (warehouse.AislesPerBlock * aisleGroupSize + warehouse.CrossAisleDistance);
-            double aisleOffset = shelf.AisleIndex * aisleGroupSize + warehouse.ShelfWidth;
+            double aisleOffset = shelf.AisleIndex * aisleGroupSize + warehouse.ShelfWidth + 0.5;
 
-            double x = blockOffset + aisleOffset; // Koridor orta noktası
-            double y = shelf.ShelfRow * (warehouse.AisleLength / warehouse.ShelvesPerAisle);
+            double x = blockOffset + aisleOffset;
+            double unitPerRow = warehouse.AisleLength / warehouse.ShelvesPerAisle;
+            double y = shelf.ShelfRow * unitPerRow + unitPerRow / 2.0;
 
             return new WarehousePoint(x, y, shelf.Label);
         }

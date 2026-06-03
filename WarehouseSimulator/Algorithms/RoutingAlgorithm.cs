@@ -92,13 +92,54 @@ namespace WarehouseSimulator.Algorithms
             => WarehouseBuilder.GetDoorPoint(warehouse);
 
         /// <summary>
+        /// İki nokta arasına depo geçiş yolu ekler (cross-aisle üzerinden).
+        /// Doğrudan çizgi yerine koridor-geçiş yolu oluşturur.
+        /// </summary>
+        protected void AddWarehousePath(List<WarehousePoint> route,
+            WarehousePoint from, WarehousePoint to, Warehouse warehouse)
+        {
+            if (Math.Abs(from.X - to.X) < 0.01)
+            {
+                route.Add(to);
+                return;
+            }
+
+            if (to.Y < 0)
+            {
+                var cf = new WarehousePoint(from.X, 0, "Geçiş-Ara");
+                route.Add(cf);
+                route.Add(to);
+                return;
+            }
+
+            if (from.Y < 0)
+            {
+                var ct = new WarehousePoint(to.X, 0, "Geçiş-Hedef");
+                route.Add(ct);
+                route.Add(to);
+                return;
+            }
+
+            double crossY = from.Y > warehouse.AisleLength / 2
+                ? warehouse.AisleLength
+                : 0;
+
+            var crossFrom = new WarehousePoint(from.X, crossY, "Geçiş-Ara");
+            var crossTo = new WarehousePoint(to.X, crossY, "Geçiş-Hedef");
+
+            route.Add(crossFrom);
+            route.Add(crossTo);
+            route.Add(to);
+        }
+
+        /// <summary>
         /// Koridorun alt geçiş (cross-aisle başlangıç) noktasını döndürür
         /// </summary>
         protected WarehousePoint GetAisleBottomPoint(int blockIndex, int aisleIndex, Warehouse warehouse)
         {
             double aisleGroupSize = warehouse.ShelfWidth * 2 + 1.0;
             double blockOffset = blockIndex * (warehouse.AislesPerBlock * aisleGroupSize + warehouse.CrossAisleDistance);
-            double x = blockOffset + aisleIndex * aisleGroupSize + warehouse.ShelfWidth;
+            double x = blockOffset + aisleIndex * aisleGroupSize + warehouse.ShelfWidth + 0.5;
             return new WarehousePoint(x, 0, $"Alt-B{blockIndex + 1}-A{aisleIndex + 1}");
         }
 
@@ -109,7 +150,7 @@ namespace WarehouseSimulator.Algorithms
         {
             double aisleGroupSize = warehouse.ShelfWidth * 2 + 1.0;
             double blockOffset = blockIndex * (warehouse.AislesPerBlock * aisleGroupSize + warehouse.CrossAisleDistance);
-            double x = blockOffset + aisleIndex * aisleGroupSize + warehouse.ShelfWidth;
+            double x = blockOffset + aisleIndex * aisleGroupSize + warehouse.ShelfWidth + 0.5;
             return new WarehousePoint(x, warehouse.AisleLength, $"Üst-B{blockIndex + 1}-A{aisleIndex + 1}");
         }
     }

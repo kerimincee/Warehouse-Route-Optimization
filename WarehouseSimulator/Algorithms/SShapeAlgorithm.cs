@@ -75,7 +75,7 @@ namespace WarehouseSimulator.Algorithms
                 goingUp = !goingUp;
             }
 
-            routePoints.Add(door);
+            AddWarehousePath(routePoints, routePoints[^1], door, warehouse);
 
             return new RouteResult
             {

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">text/microsoft-resx</resheader>
+  <resheader name="version">2.0</resheader>
+  <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</resheader>
+  <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</resheader>
+
+  <!-- MainWindow -->
+  <data name="WindowTitle" xml:space="preserve"><value>🏭 Lagerhaus-Routenoptimierung — Roodbergen Interactive Warehouse</value></data>
+  <data name="AppTitle" xml:space="preserve"><value>LAGERHAUS-ROUTENOPTIMIERUNG</value></data>
+  <data name="AppSubtitle" xml:space="preserve"><value>Roodbergen Interactive Warehouse Simulator</value></data>
+  <data name="HeaderBlock" xml:space="preserve"><value>🔷 Block: </value></data>
+  <data name="HeaderAisle" xml:space="preserve"><value> | Gang: </value></data>
+  <data name="HeaderShelfPerAisle" xml:space="preserve"><value> | Regal/Gang: </value></data>
+  <data name="WarehouseDesign" xml:space="preserve"><value>⚙️  LAGERHAUS-DESIGN</value></data>
+  <data name="BlockCount" xml:space="preserve"><value>Blockanzahl</value></data>
+  <data name="AisleCount" xml:space="preserve"><value>Ganganzahl (pro Block)</value></data>
+  <data name="ShelfCount" xml:space="preserve"><value>Regalanzahl (pro Gang)</value></data>
+  <data name="DoorLocation" xml:space="preserve"><value>Türposition</value></data>
+  <data name="DoorLeft" xml:space="preserve"><value>🚪 Links (Start)</value></data>
+  <data name="DoorRight" xml:space="preserve"><value>🚪 Rechts (Ende)</value></data>
+  <data name="DoorCenter" xml:space="preserve"><value>🚪 Mitte</value></data>
+  <data name="DistanceParameters" xml:space="preserve"><value>📏 Distanzparameter</value></data>
+  <data name="AisleLength" xml:space="preserve"><value>Ganglänge (Einheit)</value></data>
+  <data name="CrossAisleDistance" xml:space="preserve"><value>Quergang-Abstand (Einheit)</value></data>
+  <data name="ShowWarehouse" xml:space="preserve"><value>🏗️  Lagerhaus anzeigen</value></data>
+  <data name="OrderCreation" xml:space="preserve"><value>🛒  AUFTRAGSERSTELLUNG</value></data>
+  <data name="RandomProductCount" xml:space="preserve"><value>Zufällige Produktanzahl</value></data>
+  <data name="RandomOrder" xml:space="preserve"><value>🎲  Zufallsauftrag</value></data>
+  <data name="OrClickShelves" xml:space="preserve"><value>oder auf Regale in der Karte klicken</value></data>
+  <data name="ClearOrder" xml:space="preserve"><value>🗑️  Auftrag löschen</value></data>
+  <data name="ShowHeatmap" xml:space="preserve"><value>🔥 Heatmap anzeigen</value></data>
+  <data name="SelectedProduct" xml:space="preserve"><value>✅ Ausgewähltes Produkt: </value></data>
+  <data name="RouteCalculation" xml:space="preserve"><value>🧮  ROUTENBERECHNUNG</value></data>
+  <data name="AutoRunDescription" xml:space="preserve"><value>Alle Algorithmen werden automatisch ausgeführt und verglichen.</value></data>
+  <data name="CalculateAllRoutes" xml:space="preserve"><value>⚡  Alle Routen berechnen</value></data>
+  <data name="WarehouseMap" xml:space="preserve"><value>🗺️  LAGERHAUSKARTE</value></data>
+  <data name="LegendRack" xml:space="preserve"><value>Regal</value></data>
+  <data name="LegendSelected" xml:space="preserve"><value>Ausgewählt</value></data>
+  <data name="LegendRoute" xml:space="preserve"><value>Route</value></data>
+  <data name="AlgorithmComparison" xml:space="preserve"><value>📊  ALGORITHMENVERGLEICH</value></data>
+  <data name="ColAlgorithm" xml:space="preserve"><value>Algorithmus</value></data>
+  <data name="ColDistance" xml:space="preserve"><value>Distanz</value></data>
+  <data name="RouteDetail" xml:space="preserve"><value>🔍  ROUTENDETAIL</value></data>
+  <data name="TotalDistance" xml:space="preserve"><value>GESAMTDISTANZ</value></data>
+  <data name="ComputationTime" xml:space="preserve"><value>BERECHNUNGSZEIT</value></data>
+  <data name="UnitDistance" xml:space="preserve"><value> Einheiten</value></data>
+  <data name="UnitMs" xml:space="preserve"><value> ms</value></data>
+  <data name="ShowThisRoute" xml:space="preserve"><value>🎨  Diese Route anzeigen</value></data>
+  <data name="PickOrder" xml:space="preserve"><value>Kommissionierreihenfolge:</value></data>
+  <data name="FooterText" xml:space="preserve"><value>Roodbergen IWS · </value></data>
+  <data name="FooterAlgorithms" xml:space="preserve"><value>5 Algorithmen</value></data>
+
+  <!-- Canvas Labels -->
+  <data name="BlockLabel" xml:space="preserve"><value>BLOCK {0}</value></data>
+  <data name="AisleLabel" xml:space="preserve"><value>G{0}</value></data>
+  <data name="ShelfTooltip" xml:space="preserve"><value>📦 {0}
+Klicken: Auswählen/Abwählen</value></data>
+  <data name="BottomCrossAisle" xml:space="preserve"><value>Unterer Quergang</value></data>
+  <data name="TopCrossAisle" xml:space="preserve"><value>Oberer Quergang</value></data>
+  <data name="DoorLabel" xml:space="preserve"><value>TÜR / Start</value></data>
+  <data name="SummaryFormat" xml:space="preserve"><value>Gesamt: {0} Regale | {1} Gänge | {2} Blöcke</value></data>
+
+  <!-- HistoryWindow -->
+  <data name="HistoryTitle" xml:space="preserve"><value>📜 Auftragsverlauf — Datenbankansicht</value></data>
+  <data name="HistoryHeader" xml:space="preserve"><value>📊  AUFTRAGSVERLAUF (SQLite-Datenbank)</value></data>
+  <data name="CloseButton" xml:space="preserve"><value>Schließen</value></data>
+  <data name="ColId" xml:space="preserve"><value>ID</value></data>
+  <data name="ColItemCount" xml:space="preserve"><value>Anzahl</value></data>
+  <data name="ColBestAlg" xml:space="preserve"><value>Bester Alg.</value></data>
+  <data name="ColDistanceShort" xml:space="preserve"><value>Distanz</value></data>
+  <data name="ColDate" xml:space="preserve"><value>Datum</value></data>
+  <data name="DistanceUnitFormat" xml:space="preserve"><value>{0:F2} Einheiten</value></data>
+
+  <!-- ViewModel Status Messages -->
+  <data name="StatusEnterParams" xml:space="preserve"><value>Lagerhausparameter eingeben und 'Lagerhaus anzeigen' klicken.</value></data>
+  <data name="StatusWarehouseBuilt" xml:space="preserve"><value>✓ Lagerhaus erstellt: {0} Regale, {1} Gänge. Jetzt Auftrag erstellen.</value></data>
+  <data name="StatusError" xml:space="preserve"><value>Fehler: {0}</value></data>
+  <data name="ProductNameSeq" xml:space="preserve"><value>Produkt-{0:D3}</value></data>
+  <data name="ProductNameAt" xml:space="preserve"><value>Produkt@{0}</value></data>
+  <data name="StatusOrderCreated" xml:space="preserve"><value>✓ Auftrag mit {0} Produkten erstellt. Algorithmus auswählen, um Route zu berechnen.</value></data>
+  <data name="StatusOrderCleared" xml:space="preserve"><value>Auftrag gelöscht. Sie können einen neuen Auftrag erstellen.</value></data>
+  <data name="StatusSelectedCount" xml:space="preserve"><value>Ausgewählte Regalanzahl: {0}</value></data>
+  <data name="StatusCreateOrderFirst" xml:space="preserve"><value>Erstellen Sie zuerst einen Auftrag!</value></data>
+  <data name="StatusAlgorithmsComputed" xml:space="preserve"><value>✓ {0} Algorithmen berechnet. Kürzeste Distanz: {1:F2} Einheiten.</value></data>
+
+  <!-- Algorithm Names -->
+  <data name="SShapeName" xml:space="preserve"><value>S-Form (Serpentine)</value></data>
+  <data name="SShapeDesc" xml:space="preserve"><value>Der Kommissionierer durchläuft jeden Gang vollständig von Ende zu Ende und wechselt dabei die Richtung zwischen den Gängen.</value></data>
+  <data name="LargestGapName" xml:space="preserve"><value>Größte Lücke</value></data>
+  <data name="LargestGapDesc" xml:space="preserve"><value>Findet die größte Lücke in jedem Gang, um den Rückkehrpunkt zu optimieren, und wählt einen kürzeren Weg statt den ganzen Gang zu durchlaufen.</value></data>
+  <data name="AisleByName" xml:space="preserve"><value>Gang-für-Gang</value></data>
+  <data name="AisleByDesc" xml:space="preserve"><value>Vergleicht unabhängig Rückkehr- vs. Durchlaufstrategie für jeden Gang und wählt die kürzeste.</value></data>
+  <data name="OptimalNNName" xml:space="preserve"><value>Optimal - Nächster Nachbar (TSP)</value></data>
+  <data name="OptimalNNDesc" xml:space="preserve"><value>TSP-Lösung mit Nächster-Nachbar-Heuristik; wählt bei jedem Schritt das nächste Produkt basierend auf der Manhattan-Distanz.</value></data>
+  <data name="TwoOptName" xml:space="preserve"><value>2-Opt TSP (Erweitert Optimal)</value></data>
+  <data name="TwoOptDesc" xml:space="preserve"><value>Erweiterte TSP-Lösung mit 2-Opt lokaler Suche, ausgehend von einer Nächster-Nachbar-Tour.</value></data>
+
+  <!-- Database / Picker -->
+  <data name="DefaultConfigName" xml:space="preserve"><value>Lagerhaus_{0:yyyyMMdd_HHmmss}</value></data>
+  <data name="ConfigDetailsFormat" xml:space="preserve"><value>{0} Blöcke, {1} Gänge, {2} Regale — </value></data>
+  <data name="PickerDefaultName" xml:space="preserve"><value>Kommissionierer 1</value></data>
+
+  <!-- Validation -->
+  <data name="BlockCountMin" xml:space="preserve"><value>Blockanzahl muss mindestens 1 sein.</value></data>
+  <data name="AisleCountMin" xml:space="preserve"><value>Ganganzahl muss mindestens 1 sein.</value></data>
+  <data name="ShelfCountMin" xml:space="preserve"><value>Regalanzahl muss mindestens 1 sein.</value></data>
+
+  <!-- Language Switcher -->
+  <data name="LanguageLabel" xml:space="preserve"><value>🌐 Sprache / Language</value></data>
+  <data name="Turkish" xml:space="preserve"><value>Türkçe</value></data>
+  <data name="English" xml:space="preserve"><value>English</value></data>
+  <data name="German" xml:space="preserve"><value>Deutsch</value></data>
+  <data name="Italian" xml:space="preserve"><value>Italiano</value></data>
+  <data name="Spanish" xml:space="preserve"><value>Español</value></data>
+</root>

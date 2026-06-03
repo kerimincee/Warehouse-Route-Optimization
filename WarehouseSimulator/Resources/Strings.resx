@@ -110,4 +110,7 @@ Tıklayın: Seç/Kaldır</value></data>
   <data name="LanguageLabel" xml:space="preserve"><value>🌐 Dil / Language</value></data>
   <data name="Turkish" xml:space="preserve"><value>Türkçe</value></data>
   <data name="English" xml:space="preserve"><value>English</value></data>
+  <data name="German" xml:space="preserve"><value>Deutsch</value></data>
+  <data name="Italian" xml:space="preserve"><value>Italiano</value></data>
+  <data name="Spanish" xml:space="preserve"><value>Español</value></data>
 </root>

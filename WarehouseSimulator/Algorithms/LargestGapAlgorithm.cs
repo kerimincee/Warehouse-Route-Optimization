@@ -26,7 +26,7 @@ namespace WarehouseSimulator.Algorithms
                 .ThenBy(g => g.Key.AisleIndex)
                 .ToList();
 
-            double currentY = door.Y;
+            WarehousePoint? lastExit = null;
 
             foreach (var aisleGroup in byAisle)
             {
@@ -50,17 +50,24 @@ namespace WarehouseSimulator.Algorithms
 
                 if (largestGapIndex == gaps.Count - 1)
                 {
-                    routePoints.Add(bottomPt);
+                    if (lastExit != null)
+                        AddWarehousePath(routePoints, lastExit, bottomPt, warehouse);
+                    else
+                        routePoints.Add(bottomPt);
                     foreach (var (shelf, pt) in shelvesOrdered.Zip(pickPoints))
                     {
                         routePoints.Add(pt);
                         AddPickItem(pickOrder, shelf);
                     }
                     routePoints.Add(bottomPt);
+                    lastExit = bottomPt;
                 }
                 else if (largestGapIndex == 0)
                 {
-                    routePoints.Add(topPt);
+                    if (lastExit != null)
+                        AddWarehousePath(routePoints, lastExit, topPt, warehouse);
+                    else
+                        routePoints.Add(topPt);
                     foreach (var (shelf, pt) in shelvesOrdered.AsEnumerable().Reverse()
                         .Zip(pickPoints.AsEnumerable().Reverse()))
                     {
@@ -68,10 +75,14 @@ namespace WarehouseSimulator.Algorithms
                         AddPickItem(pickOrder, shelf);
                     }
                     routePoints.Add(topPt);
+                    lastExit = topPt;
                 }
                 else
                 {
-                    routePoints.Add(bottomPt);
+                    if (lastExit != null)
+                        AddWarehousePath(routePoints, lastExit, bottomPt, warehouse);
+                    else
+                        routePoints.Add(bottomPt);
                     for (int i = 0; i < largestGapIndex; i++)
                     {
                         routePoints.Add(pickPoints[i]);
@@ -86,10 +97,11 @@ namespace WarehouseSimulator.Algorithms
                         AddPickItem(pickOrder, shelvesOrdered[i]);
                     }
                     routePoints.Add(topPt);
+                    lastExit = topPt;
                 }
             }
 
-            routePoints.Add(door);
+            AddWarehousePath(routePoints, routePoints[^1], door, warehouse);
 
             return new RouteResult
             {

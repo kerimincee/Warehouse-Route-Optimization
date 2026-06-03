@@ -25,7 +25,7 @@ namespace WarehouseSimulator.Algorithms
                 .ThenBy(g => g.Key.AisleIndex)
                 .ToList();
 
-            double currentY = 0;
+            WarehousePoint? lastExit = null;
 
             foreach (var aisleGroup in byAisle)
             {
@@ -42,7 +42,6 @@ namespace WarehouseSimulator.Algorithms
 
                 if (pickPoints.Count == 0) continue;
 
-                double firstY = pickPoints[0].Y;
                 double lastY = pickPoints[^1].Y;
                 double aisleLen = warehouse.AisleLength;
 
@@ -51,7 +50,10 @@ namespace WarehouseSimulator.Algorithms
 
                 if (returnCost <= traversalCost)
                 {
-                    routePoints.Add(bottomPt);
+                    if (lastExit != null)
+                        AddWarehousePath(routePoints, lastExit, bottomPt, warehouse);
+                    else
+                        routePoints.Add(bottomPt);
                     foreach (var (shelf, pt) in shelvesOrdered.Zip(pickPoints))
                     {
                         routePoints.Add(pt);
@@ -63,11 +65,14 @@ namespace WarehouseSimulator.Algorithms
                         });
                     }
                     routePoints.Add(bottomPt);
-                    currentY = 0;
+                    lastExit = bottomPt;
                 }
                 else
                 {
-                    routePoints.Add(bottomPt);
+                    if (lastExit != null)
+                        AddWarehousePath(routePoints, lastExit, bottomPt, warehouse);
+                    else
+                        routePoints.Add(bottomPt);
                     foreach (var (shelf, pt) in shelvesOrdered.Zip(pickPoints))
                     {
                         routePoints.Add(pt);
@@ -79,21 +84,12 @@ namespace WarehouseSimulator.Algorithms
                         });
                     }
                     routePoints.Add(topPt);
-                    currentY = aisleLen;
+                    lastExit = topPt;
                 }
             }
 
             if (routePoints.Count > 0 && routePoints[^1] != door)
-            {
-                var lastPt = routePoints[^1];
-                if (lastPt.Y > 0)
-                {
-                    var bottomReturn = new WarehousePoint(lastPt.X, 0, "Alt-Geçiş");
-                    routePoints.Add(bottomReturn);
-                }
-            }
-
-            routePoints.Add(door);
+                AddWarehousePath(routePoints, routePoints[^1], door, warehouse);
 
             return new RouteResult
             {

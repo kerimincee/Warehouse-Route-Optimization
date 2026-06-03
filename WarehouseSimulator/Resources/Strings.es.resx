@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">text/microsoft-resx</resheader>
+  <resheader name="version">2.0</resheader>
+  <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</resheader>
+  <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</resheader>
+
+  <!-- MainWindow -->
+  <data name="WindowTitle" xml:space="preserve"><value>🏭 Optimización de Rutas en Almacén — Roodbergen Interactive Warehouse</value></data>
+  <data name="AppTitle" xml:space="preserve"><value>OPTIMIZACIÓN DE RUTAS EN ALMACÉN</value></data>
+  <data name="AppSubtitle" xml:space="preserve"><value>Roodbergen Interactive Warehouse Simulator</value></data>
+  <data name="HeaderBlock" xml:space="preserve"><value>🔷 Bloque: </value></data>
+  <data name="HeaderAisle" xml:space="preserve"><value> | Pasillo: </value></data>
+  <data name="HeaderShelfPerAisle" xml:space="preserve"><value> | Estante/Pasillo: </value></data>
+  <data name="WarehouseDesign" xml:space="preserve"><value>⚙️  DISEÑO DEL ALMACÉN</value></data>
+  <data name="BlockCount" xml:space="preserve"><value>Número de Bloques</value></data>
+  <data name="AisleCount" xml:space="preserve"><value>Número de Pasillos (por Bloque)</value></data>
+  <data name="ShelfCount" xml:space="preserve"><value>Número de Estantes (por Pasillo)</value></data>
+  <data name="DoorLocation" xml:space="preserve"><value>Ubicación de la Puerta</value></data>
+  <data name="DoorLeft" xml:space="preserve"><value>🚪 Izquierda (Inicio)</value></data>
+  <data name="DoorRight" xml:space="preserve"><value>🚪 Derecha (Final)</value></data>
+  <data name="DoorCenter" xml:space="preserve"><value>🚪 Centro</value></data>
+  <data name="DistanceParameters" xml:space="preserve"><value>📏 Parámetros de Distancia</value></data>
+  <data name="AisleLength" xml:space="preserve"><value>Longitud del Pasillo (unidad)</value></data>
+  <data name="CrossAisleDistance" xml:space="preserve"><value>Distancia entre Pasillos (unidad)</value></data>
+  <data name="ShowWarehouse" xml:space="preserve"><value>🏗️  Mostrar Almacén</value></data>
+  <data name="OrderCreation" xml:space="preserve"><value>🛒  CREACIÓN DE PEDIDO</value></data>
+  <data name="RandomProductCount" xml:space="preserve"><value>Cantidad de Productos Aleatorios</value></data>
+  <data name="RandomOrder" xml:space="preserve"><value>🎲  Pedido Aleatorio</value></data>
+  <data name="OrClickShelves" xml:space="preserve"><value>o haga clic en los estantes del mapa</value></data>
+  <data name="ClearOrder" xml:space="preserve"><value>🗑️  Limpiar Pedido</value></data>
+  <data name="ShowHeatmap" xml:space="preserve"><value>🔥 Mostrar Mapa de Calor</value></data>
+  <data name="SelectedProduct" xml:space="preserve"><value>✅ Producto Seleccionado: </value></data>
+  <data name="RouteCalculation" xml:space="preserve"><value>🧮  CÁLCULO DE RUTA</value></data>
+  <data name="AutoRunDescription" xml:space="preserve"><value>Todos los algoritmos se ejecutan y comparan automáticamente.</value></data>
+  <data name="CalculateAllRoutes" xml:space="preserve"><value>⚡  Calcular Todas las Rutas</value></data>
+  <data name="WarehouseMap" xml:space="preserve"><value>🗺️  MAPA DEL ALMACÉN</value></data>
+  <data name="LegendRack" xml:space="preserve"><value>Estante</value></data>
+  <data name="LegendSelected" xml:space="preserve"><value>Seleccionado</value></data>
+  <data name="LegendRoute" xml:space="preserve"><value>Ruta</value></data>
+  <data name="AlgorithmComparison" xml:space="preserve"><value>📊  COMPARACIÓN DE ALGORITMOS</value></data>
+  <data name="ColAlgorithm" xml:space="preserve"><value>Algoritmo</value></data>
+  <data name="ColDistance" xml:space="preserve"><value>Distancia</value></data>
+  <data name="RouteDetail" xml:space="preserve"><value>🔍  DETALLE DE RUTA</value></data>
+  <data name="TotalDistance" xml:space="preserve"><value>DISTANCIA TOTAL</value></data>
+  <data name="ComputationTime" xml:space="preserve"><value>TIEMPO DE CÁLCULO</value></data>
+  <data name="UnitDistance" xml:space="preserve"><value> unidades</value></data>
+  <data name="UnitMs" xml:space="preserve"><value> ms</value></data>
+  <data name="ShowThisRoute" xml:space="preserve"><value>🎨  Mostrar Esta Ruta</value></data>
+  <data name="PickOrder" xml:space="preserve"><value>Secuencia de Recolección:</value></data>
+  <data name="FooterText" xml:space="preserve"><value>Roodbergen IWS · </value></data>
+  <data name="FooterAlgorithms" xml:space="preserve"><value>5 Algoritmos</value></data>
+
+  <!-- Canvas Labels -->
+  <data name="BlockLabel" xml:space="preserve"><value>BLOQUE {0}</value></data>
+  <data name="AisleLabel" xml:space="preserve"><value>P{0}</value></data>
+  <data name="ShelfTooltip" xml:space="preserve"><value>📦 {0}
+Clic: Seleccionar/Deseleccionar</value></data>
+  <data name="BottomCrossAisle" xml:space="preserve"><value>Pasillo Inferior</value></data>
+  <data name="TopCrossAisle" xml:space="preserve"><value>Pasillo Superior</value></data>
+  <data name="DoorLabel" xml:space="preserve"><value>PUERTA / Inicio</value></data>
+  <data name="SummaryFormat" xml:space="preserve"><value>Total: {0} estantes | {1} pasillos | {2} bloques</value></data>
+
+  <!-- HistoryWindow -->
+  <data name="HistoryTitle" xml:space="preserve"><value>📜 Historial de Pedidos — Vista de Base de Datos</value></data>
+  <data name="HistoryHeader" xml:space="preserve"><value>📊  HISTORIAL DE PEDIDOS (Base de Datos SQLite)</value></data>
+  <data name="CloseButton" xml:space="preserve"><value>Cerrar</value></data>
+  <data name="ColId" xml:space="preserve"><value>ID</value></data>
+  <data name="ColItemCount" xml:space="preserve"><value>Cantidad</value></data>
+  <data name="ColBestAlg" xml:space="preserve"><value>Mejor Alg.</value></data>
+  <data name="ColDistanceShort" xml:space="preserve"><value>Distancia</value></data>
+  <data name="ColDate" xml:space="preserve"><value>Fecha</value></data>
+  <data name="DistanceUnitFormat" xml:space="preserve"><value>{0:F2} unidades</value></data>
+
+  <!-- ViewModel Status Messages -->
+  <data name="StatusEnterParams" xml:space="preserve"><value>Ingrese los parámetros del almacén y presione 'Mostrar Almacén'.</value></data>
+  <data name="StatusWarehouseBuilt" xml:space="preserve"><value>✓ Almacén creado: {0} estantes, {1} pasillos. Cree un pedido ahora.</value></data>
+  <data name="StatusError" xml:space="preserve"><value>Error: {0}</value></data>
+  <data name="ProductNameSeq" xml:space="preserve"><value>Producto-{0:D3}</value></data>
+  <data name="ProductNameAt" xml:space="preserve"><value>Producto@{0}</value></data>
+  <data name="StatusOrderCreated" xml:space="preserve"><value>✓ Pedido creado con {0} productos. Seleccione un algoritmo para calcular la ruta.</value></data>
+  <data name="StatusOrderCleared" xml:space="preserve"><value>Pedido limpiado. Puede crear un nuevo pedido.</value></data>
+  <data name="StatusSelectedCount" xml:space="preserve"><value>Número de estantes seleccionados: {0}</value></data>
+  <data name="StatusCreateOrderFirst" xml:space="preserve"><value>¡Cree un pedido primero!</value></data>
+  <data name="StatusAlgorithmsComputed" xml:space="preserve"><value>✓ {0} algoritmos calculados. Distancia más corta: {1:F2} unidades.</value></data>
+
+  <!-- Algorithm Names -->
+  <data name="SShapeName" xml:space="preserve"><value>Forma de S (Serpentina)</value></data>
+  <data name="SShapeDesc" xml:space="preserve"><value>El recolector recorre cada pasillo completamente de extremo a extremo, alternando la dirección entre pasillos.</value></data>
+  <data name="LargestGapName" xml:space="preserve"><value>Brecha Más Grande</value></data>
+  <data name="LargestGapDesc" xml:space="preserve"><value>Encuentra la brecha más grande en cada pasillo para optimizar el punto de retorno, eligiendo un camino más corto en lugar de recorrer todo el pasillo.</value></data>
+  <data name="AisleByName" xml:space="preserve"><value>Pasillo por Pasillo</value></data>
+  <data name="AisleByDesc" xml:space="preserve"><value>Compara independientemente las estrategias de Retorno vs Recorrido para cada pasillo y elige la más corta.</value></data>
+  <data name="OptimalNNName" xml:space="preserve"><value>Óptimo - Vecino Más Cercano (TSP)</value></data>
+  <data name="OptimalNNDesc" xml:space="preserve"><value>Solución TSP con heurística del Vecino Más Cercano; selecciona el producto más cercano en cada paso usando la distancia de Manhattan.</value></data>
+  <data name="TwoOptName" xml:space="preserve"><value>2-Opt TSP (Óptimo Avanzado)</value></data>
+  <data name="TwoOptDesc" xml:space="preserve"><value>Solución TSP avanzada con búsqueda local 2-Opt partiendo de un recorrido del Vecino Más Cercano.</value></data>
+
+  <!-- Database / Picker -->
+  <data name="DefaultConfigName" xml:space="preserve"><value>Almacen_{0:yyyyMMdd_HHmmss}</value></data>
+  <data name="ConfigDetailsFormat" xml:space="preserve"><value>{0} Bloques, {1} Pasillos, {2} Estantes — </value></data>
+  <data name="PickerDefaultName" xml:space="preserve"><value>Recolector 1</value></data>
+
+  <!-- Validation -->
+  <data name="BlockCountMin" xml:space="preserve"><value>El número de bloques debe ser al menos 1.</value></data>
+  <data name="AisleCountMin" xml:space="preserve"><value>El número de pasillos debe ser al menos 1.</value></data>
+  <data name="ShelfCountMin" xml:space="preserve"><value>El número de estantes debe ser al menos 1.</value></data>
+
+  <!-- Language Switcher -->
+  <data name="LanguageLabel" xml:space="preserve"><value>🌐 Idioma / Language</value></data>
+  <data name="Turkish" xml:space="preserve"><value>Türkçe</value></data>
+  <data name="English" xml:space="preserve"><value>English</value></data>
+  <data name="German" xml:space="preserve"><value>Deutsch</value></data>
+  <data name="Italian" xml:space="preserve"><value>Italiano</value></data>
+  <data name="Spanish" xml:space="preserve"><value>Español</value></data>
+</root>
