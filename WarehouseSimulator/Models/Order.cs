@@ -59,7 +59,7 @@ namespace WarehouseSimulator.Models
     public class Picker
     {
         /// <summary>Toplayıcının adı</summary>
-        public string Name { get; set; } = "Toplayıcı 1";
+        public string Name { get; set; } = "";
 
         /// <summary>Başlangıç konumu (kapı)</summary>
         public WarehousePoint StartPosition { get; set; } = new();

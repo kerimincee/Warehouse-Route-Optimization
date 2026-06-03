@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">text/microsoft-resx</resheader>
+  <resheader name="version">2.0</resheader>
+  <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</resheader>
+  <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</resheader>
+
+  <!-- MainWindow -->
+  <data name="WindowTitle" xml:space="preserve"><value>🏭 Warehouse Route Optimization — Roodbergen Interactive Warehouse</value></data>
+  <data name="AppTitle" xml:space="preserve"><value>WAREHOUSE ROUTE OPTIMIZATION</value></data>
+  <data name="AppSubtitle" xml:space="preserve"><value>Roodbergen Interactive Warehouse Simulator</value></data>
+  <data name="HeaderBlock" xml:space="preserve"><value>🔷 Block: </value></data>
+  <data name="HeaderAisle" xml:space="preserve"><value> | Aisle: </value></data>
+  <data name="HeaderShelfPerAisle" xml:space="preserve"><value> | Shelf/Aisle: </value></data>
+  <data name="WarehouseDesign" xml:space="preserve"><value>⚙️  WAREHOUSE DESIGN</value></data>
+  <data name="BlockCount" xml:space="preserve"><value>Block Count</value></data>
+  <data name="AisleCount" xml:space="preserve"><value>Aisle Count (per Block)</value></data>
+  <data name="ShelfCount" xml:space="preserve"><value>Shelf Count (per Aisle)</value></data>
+  <data name="DoorLocation" xml:space="preserve"><value>Door Location</value></data>
+  <data name="DoorLeft" xml:space="preserve"><value>🚪 Left (Start)</value></data>
+  <data name="DoorRight" xml:space="preserve"><value>🚪 Right (End)</value></data>
+  <data name="DoorCenter" xml:space="preserve"><value>🚪 Center</value></data>
+  <data name="DistanceParameters" xml:space="preserve"><value>📏 Distance Parameters</value></data>
+  <data name="AisleLength" xml:space="preserve"><value>Aisle Length (unit)</value></data>
+  <data name="CrossAisleDistance" xml:space="preserve"><value>Cross-Aisle Distance (unit)</value></data>
+  <data name="ShowWarehouse" xml:space="preserve"><value>🏗️  Show Warehouse</value></data>
+  <data name="OrderCreation" xml:space="preserve"><value>🛒  ORDER CREATION</value></data>
+  <data name="RandomProductCount" xml:space="preserve"><value>Random Product Count</value></data>
+  <data name="RandomOrder" xml:space="preserve"><value>🎲  Random Order</value></data>
+  <data name="OrClickShelves" xml:space="preserve"><value>or click shelves on the map</value></data>
+  <data name="ClearOrder" xml:space="preserve"><value>🗑️  Clear Order</value></data>
+  <data name="ShowHeatmap" xml:space="preserve"><value>🔥 Show Heatmap</value></data>
+  <data name="SelectedProduct" xml:space="preserve"><value>✅ Selected Product: </value></data>
+  <data name="RouteCalculation" xml:space="preserve"><value>🧮  ROUTE CALCULATION</value></data>
+  <data name="AutoRunDescription" xml:space="preserve"><value>All algorithms are run and compared automatically.</value></data>
+  <data name="CalculateAllRoutes" xml:space="preserve"><value>⚡  Calculate All Routes</value></data>
+  <data name="WarehouseMap" xml:space="preserve"><value>🗺️  WAREHOUSE MAP</value></data>
+  <data name="LegendRack" xml:space="preserve"><value>Rack</value></data>
+  <data name="LegendSelected" xml:space="preserve"><value>Selected</value></data>
+  <data name="LegendRoute" xml:space="preserve"><value>Route</value></data>
+  <data name="AlgorithmComparison" xml:space="preserve"><value>📊  ALGORITHM COMPARISON</value></data>
+  <data name="ColAlgorithm" xml:space="preserve"><value>Algorithm</value></data>
+  <data name="ColDistance" xml:space="preserve"><value>Distance</value></data>
+  <data name="RouteDetail" xml:space="preserve"><value>🔍  ROUTE DETAIL</value></data>
+  <data name="TotalDistance" xml:space="preserve"><value>TOTAL DISTANCE</value></data>
+  <data name="ComputationTime" xml:space="preserve"><value>COMPUTATION TIME</value></data>
+  <data name="UnitDistance" xml:space="preserve"><value> units</value></data>
+  <data name="UnitMs" xml:space="preserve"><value> ms</value></data>
+  <data name="ShowThisRoute" xml:space="preserve"><value>🎨  Show This Route</value></data>
+  <data name="PickOrder" xml:space="preserve"><value>Pick Sequence:</value></data>
+  <data name="FooterText" xml:space="preserve"><value>Roodbergen IWS · </value></data>
+  <data name="FooterAlgorithms" xml:space="preserve"><value>5 Algorithms</value></data>
+
+  <!-- Canvas Labels -->
+  <data name="BlockLabel" xml:space="preserve"><value>BLOCK {0}</value></data>
+  <data name="AisleLabel" xml:space="preserve"><value>A{0}</value></data>
+  <data name="ShelfTooltip" xml:space="preserve"><value>📦 {0}
+Click: Select/Deselect</value></data>
+  <data name="BottomCrossAisle" xml:space="preserve"><value>Bottom Cross</value></data>
+  <data name="TopCrossAisle" xml:space="preserve"><value>Top Cross</value></data>
+  <data name="DoorLabel" xml:space="preserve"><value>DOOR / Start</value></data>
+  <data name="SummaryFormat" xml:space="preserve"><value>Total: {0} racks | {1} aisles | {2} blocks</value></data>
+
+  <!-- HistoryWindow -->
+  <data name="HistoryTitle" xml:space="preserve"><value>📜 Order History — Database View</value></data>
+  <data name="HistoryHeader" xml:space="preserve"><value>📊  ORDER HISTORY (SQLite Database)</value></data>
+  <data name="CloseButton" xml:space="preserve"><value>Close</value></data>
+  <data name="ColId" xml:space="preserve"><value>ID</value></data>
+  <data name="ColItemCount" xml:space="preserve"><value>Item Count</value></data>
+  <data name="ColBestAlg" xml:space="preserve"><value>Best Alg.</value></data>
+  <data name="ColDistanceShort" xml:space="preserve"><value>Distance</value></data>
+  <data name="ColDate" xml:space="preserve"><value>Date</value></data>
+  <data name="DistanceUnitFormat" xml:space="preserve"><value>{0:F2} units</value></data>
+
+  <!-- ViewModel Status Messages -->
+  <data name="StatusEnterParams" xml:space="preserve"><value>Enter warehouse parameters and press 'Show Warehouse'.</value></data>
+  <data name="StatusWarehouseBuilt" xml:space="preserve"><value>✓ Warehouse built: {0} racks, {1} aisles. Create an order now.</value></data>
+  <data name="StatusError" xml:space="preserve"><value>Error: {0}</value></data>
+  <data name="ProductNameSeq" xml:space="preserve"><value>Product-{0:D3}</value></data>
+  <data name="ProductNameAt" xml:space="preserve"><value>Product@{0}</value></data>
+  <data name="StatusOrderCreated" xml:space="preserve"><value>✓ Order created with {0} products. Select an algorithm to calculate route.</value></data>
+  <data name="StatusOrderCleared" xml:space="preserve"><value>Order cleared. You can create a new order.</value></data>
+  <data name="StatusSelectedCount" xml:space="preserve"><value>Selected rack count: {0}</value></data>
+  <data name="StatusCreateOrderFirst" xml:space="preserve"><value>Create an order first!</value></data>
+  <data name="StatusAlgorithmsComputed" xml:space="preserve"><value>✓ {0} algorithms computed. Shortest distance: {1:F2} units.</value></data>
+
+  <!-- Algorithm Names -->
+  <data name="SShapeName" xml:space="preserve"><value>S-Shape (Serpentine)</value></data>
+  <data name="SShapeDesc" xml:space="preserve"><value>The picker traverses each aisle completely from end to end, alternating direction between aisles.</value></data>
+  <data name="LargestGapName" xml:space="preserve"><value>Largest Gap</value></data>
+  <data name="LargestGapDesc" xml:space="preserve"><value>Finds the largest gap within each aisle to optimize the return point, choosing a shorter path instead of traversing the full aisle.</value></data>
+  <data name="AisleByName" xml:space="preserve"><value>Aisle-by-Aisle</value></data>
+  <data name="AisleByDesc" xml:space="preserve"><value>Independently compares Return vs Traversal strategy for each aisle and picks the shortest.</value></data>
+  <data name="OptimalNNName" xml:space="preserve"><value>Optimal - Nearest Neighbor (TSP)</value></data>
+  <data name="OptimalNNDesc" xml:space="preserve"><value>TSP solution with Nearest Neighbor heuristic; targets the nearest product at each step using Manhattan distance.</value></data>
+  <data name="TwoOptName" xml:space="preserve"><value>2-Opt TSP (Advanced Optimal)</value></data>
+  <data name="TwoOptDesc" xml:space="preserve"><value>Advanced TSP solution with 2-Opt local search improvement starting from a Nearest Neighbor tour.</value></data>
+
+  <!-- Database / Picker -->
+  <data name="DefaultConfigName" xml:space="preserve"><value>Warehouse_{0:yyyyMMdd_HHmmss}</value></data>
+  <data name="ConfigDetailsFormat" xml:space="preserve"><value>{0} Blocks, {1} Aisles, {2} Racks — </value></data>
+  <data name="PickerDefaultName" xml:space="preserve"><value>Picker 1</value></data>
+
+  <!-- Validation -->
+  <data name="BlockCountMin" xml:space="preserve"><value>Block count must be at least 1.</value></data>
+  <data name="AisleCountMin" xml:space="preserve"><value>Aisle count must be at least 1.</value></data>
+  <data name="ShelfCountMin" xml:space="preserve"><value>Shelf count must be at least 1.</value></data>
+
+  <!-- Language Switcher -->
+  <data name="LanguageLabel" xml:space="preserve"><value>🌐 Dil / Language</value></data>
+  <data name="Turkish" xml:space="preserve"><value>Türkçe</value></data>
+  <data name="English" xml:space="preserve"><value>English</value></data>
+</root>

@@ -6,14 +6,10 @@ using System.Runtime.CompilerServices;
 using WarehouseSimulator.Models;
 using WarehouseSimulator.Algorithms;
 using WarehouseSimulator.Helpers;
+using WarehouseSimulator.Resources;
 
 namespace WarehouseSimulator.ViewModels
 {
-    /// <summary>
-    /// Ana pencere için ViewModel.
-    /// MVVM mimarisi: Model ve View arasında köprü görevi görür.
-    /// INotifyPropertyChanged implementasyonu ile UI güncellemeleri otomatik yapılır.
-    /// </summary>
     public class MainViewModel : INotifyPropertyChanged
     {
         // ===== Depo Parametreleri =====
@@ -24,42 +20,36 @@ namespace WarehouseSimulator.ViewModels
         private double _aisleLength = 10.0;
         private double _crossAisleDistance = 3.0;
 
-        /// <summary>Blok sayısı (1-10)</summary>
         public int BlockCount
         {
             get => _blockCount;
             set { _blockCount = Math.Max(1, Math.Min(10, value)); OnPropertyChanged(); }
         }
 
-        /// <summary>Koridor sayısı (1-12)</summary>
         public int AislesPerBlock
         {
             get => _aislesPerBlock;
             set { _aislesPerBlock = Math.Max(1, Math.Min(12, value)); OnPropertyChanged(); }
         }
 
-        /// <summary>Raf sayısı (2-20)</summary>
         public int ShelvesPerAisle
         {
             get => _shelvesPerAisle;
             set { _shelvesPerAisle = Math.Max(2, Math.Min(20, value)); OnPropertyChanged(); }
         }
 
-        /// <summary>Kapı lokasyonu</summary>
         public DoorLocation DoorLocation
         {
             get => _doorLocation;
             set { _doorLocation = value; OnPropertyChanged(); }
         }
 
-        /// <summary>Koridor uzunluğu (birim)</summary>
         public double AisleLength
         {
             get => _aisleLength;
             set { _aisleLength = Math.Max(1, value); OnPropertyChanged(); }
         }
 
-        /// <summary>Geçiş mesafesi (birim)</summary>
         public double CrossAisleDistance
         {
             get => _crossAisleDistance;
@@ -69,7 +59,6 @@ namespace WarehouseSimulator.ViewModels
         // ===== Sipariş Parametreleri =====
         private int _randomOrderCount = 7;
 
-        /// <summary>Rastgele sipariş sayısı</summary>
         public int RandomOrderCount
         {
             get => _randomOrderCount;
@@ -79,39 +68,34 @@ namespace WarehouseSimulator.ViewModels
         // ===== Durum =====
         private Warehouse? _warehouse;
         private Order? _currentOrder;
-        private string _statusMessage = "Depo parametrelerini girin ve 'Depoyu Göster' butonuna basın.";
+        private string _statusMessage = "";
         private bool _isWarehouseBuilt;
         private bool _hasOrder;
 
-        /// <summary>Oluşturulmuş depo nesnesi</summary>
         public Warehouse? Warehouse
         {
             get => _warehouse;
             set { _warehouse = value; OnPropertyChanged(); IsWarehouseBuilt = value != null; }
         }
 
-        /// <summary>Mevcut sipariş</summary>
         public Order? CurrentOrder
         {
             get => _currentOrder;
             set { _currentOrder = value; OnPropertyChanged(); HasOrder = value?.ItemCount > 0; }
         }
 
-        /// <summary>Durum mesajı (alt barı için)</summary>
         public string StatusMessage
         {
             get => _statusMessage;
             set { _statusMessage = value; OnPropertyChanged(); }
         }
 
-        /// <summary>Depo oluşturuldu mu?</summary>
         public bool IsWarehouseBuilt
         {
             get => _isWarehouseBuilt;
             set { _isWarehouseBuilt = value; OnPropertyChanged(); }
         }
 
-        /// <summary>Sipariş var mı?</summary>
         public bool HasOrder
         {
             get => _hasOrder;
@@ -119,7 +103,6 @@ namespace WarehouseSimulator.ViewModels
         }
 
         private bool _isHeatmapVisible;
-        /// <summary>Isı haritası görünür mü?</summary>
         public bool IsHeatmapVisible
         {
             get => _isHeatmapVisible;
@@ -127,7 +110,6 @@ namespace WarehouseSimulator.ViewModels
         }
 
         // ===== Algoritmalar =====
-        /// <summary>Kullanılabilir algoritmalar listesi</summary>
         public List<RoutingAlgorithm> AvailableAlgorithms { get; } = new()
         {
             new SShapeAlgorithm(),
@@ -140,7 +122,6 @@ namespace WarehouseSimulator.ViewModels
         // ===== Sonuçlar =====
         private ObservableCollection<RouteResult> _algorithmResults = new();
 
-        /// <summary>Hesaplanan algoritma sonuçları</summary>
         public ObservableCollection<RouteResult> AlgorithmResults
         {
             get => _algorithmResults;
@@ -149,7 +130,6 @@ namespace WarehouseSimulator.ViewModels
 
         private RouteResult? _selectedResult;
 
-        /// <summary>Görselleştirme için seçili sonuç</summary>
         public RouteResult? SelectedResult
         {
             get => _selectedResult;
@@ -160,9 +140,11 @@ namespace WarehouseSimulator.ViewModels
         private long _currentConfigId = -1;
         public long CurrentConfigId => _currentConfigId;
 
-        /// <summary>
-        /// Depoyu verilen parametrelerle oluşturur
-        /// </summary>
+        public MainViewModel()
+        {
+            StatusMessage = LanguageResources.GetString("StatusEnterParams");
+        }
+
         public void BuildWarehouse()
         {
             try
@@ -171,26 +153,21 @@ namespace WarehouseSimulator.ViewModels
                     BlockCount, AislesPerBlock, ShelvesPerAisle,
                     DoorLocation, AisleLength, CrossAisleDistance);
 
-                // Veritabanına kayıt et
                 _currentConfigId = DatabaseManager.Instance.SaveWarehouseConfig(Warehouse);
 
                 AlgorithmResults.Clear();
                 SelectedResult = null;
                 CurrentOrder = new Order { OrderId = 1 };
 
-                StatusMessage = $"✓ Depo oluşturuldu: {Warehouse.TotalShelves} raf, " +
-                               $"{Warehouse.TotalAisles} koridor. " +
-                               $"Şimdi sipariş oluşturun.";
+                StatusMessage = LanguageResources.Format("StatusWarehouseBuilt",
+                    Warehouse.TotalShelves, Warehouse.TotalAisles);
             }
             catch (Exception ex)
             {
-                StatusMessage = $"Hata: {ex.Message}";
+                StatusMessage = LanguageResources.Format("StatusError", ex.Message);
             }
         }
 
-        /// <summary>
-        /// Rastgele sipariş oluşturur
-        /// </summary>
         public void GenerateRandomOrder()
         {
             if (Warehouse == null) return;
@@ -198,7 +175,6 @@ namespace WarehouseSimulator.ViewModels
             var allShelves = Warehouse.GetAllShelves();
             if (allShelves.Count == 0) return;
 
-            // Önce tüm seçimleri temizle
             Warehouse.ClearAllSelections();
 
             var rng = new Random();
@@ -207,7 +183,6 @@ namespace WarehouseSimulator.ViewModels
 
             CurrentOrder = new Order { OrderId = (CurrentOrder?.OrderId ?? 0) + 1, CreatedAt = DateTime.Now };
 
-            // Benzersiz rastgele indeksler seç
             while (selected.Count < count)
                 selected.Add(rng.Next(allShelves.Count));
 
@@ -218,7 +193,7 @@ namespace WarehouseSimulator.ViewModels
                 CurrentOrder.Items.Add(new OrderItem
                 {
                     Location = allShelves[idx],
-                    ProductName = $"Ürün-{seq:D3}",
+                    ProductName = LanguageResources.Format("ProductNameSeq", seq),
                     PickSequence = seq++
                 });
             }
@@ -227,25 +202,18 @@ namespace WarehouseSimulator.ViewModels
 
             AlgorithmResults.Clear();
             SelectedResult = null;
-            StatusMessage = $"✓ {count} ürünlük sipariş oluşturuldu. " +
-                           $"Algoritma seçerek rotayı hesaplayın.";
+            StatusMessage = LanguageResources.Format("StatusOrderCreated", count);
         }
 
-        /// <summary>
-        /// Tüm sipariş seçimlerini temizler
-        /// </summary>
         public void ClearOrder()
         {
             Warehouse?.ClearAllSelections();
             CurrentOrder = new Order { OrderId = (CurrentOrder?.OrderId ?? 0) + 1 };
             AlgorithmResults.Clear();
             SelectedResult = null;
-            StatusMessage = "Sipariş temizlendi. Yeni sipariş oluşturabilirsiniz.";
+            StatusMessage = LanguageResources.GetString("StatusOrderCleared");
         }
 
-        /// <summary>
-        /// Seçili raf durumunu değiştirir (toggle)
-        /// </summary>
         public void ToggleShelf(ShelfLocation shelf)
         {
             if (Warehouse == null || CurrentOrder == null) return;
@@ -254,11 +222,11 @@ namespace WarehouseSimulator.ViewModels
 
             if (shelf.IsSelected)
             {
-                shelf.PickCount++; // Isı haritası için artır
+                shelf.PickCount++;
                 CurrentOrder.Items.Add(new OrderItem
                 {
                     Location = shelf,
-                    ProductName = $"Ürün@{shelf.Label}",
+                    ProductName = LanguageResources.Format("ProductNameAt", shelf.Label),
                     PickSequence = CurrentOrder.ItemCount
                 });
             }
@@ -271,17 +239,14 @@ namespace WarehouseSimulator.ViewModels
             HasOrder = CurrentOrder.ItemCount > 0;
             AlgorithmResults.Clear();
             SelectedResult = null;
-            StatusMessage = $"Seçili raf sayısı: {CurrentOrder.ItemCount}";
+            StatusMessage = LanguageResources.Format("StatusSelectedCount", CurrentOrder.ItemCount);
         }
 
-        /// <summary>
-        /// Tüm seçili algoritmalar için rota hesaplar
-        /// </summary>
         public void CalculateAllRoutes()
         {
             if (Warehouse == null || CurrentOrder == null || CurrentOrder.ItemCount == 0)
             {
-                StatusMessage = "Önce sipariş oluşturun!";
+                StatusMessage = LanguageResources.GetString("StatusCreateOrderFirst");
                 return;
             }
 
@@ -300,29 +265,25 @@ namespace WarehouseSimulator.ViewModels
                     bestDist = result.TotalDistance;
             }
 
-            // En iyi algoritmayı işaretle
             foreach (var r in results)
             {
                 r.IsBest = Math.Abs(r.TotalDistance - bestDist) < 0.01;
                 AlgorithmResults.Add(r);
             }
 
-            // Veritabanına kayıt et
             if (CurrentOrder != null && _currentConfigId > 0)
             {
                 try
                 {
                     DatabaseManager.Instance.SaveOrder(CurrentOrder, _currentConfigId, results);
                 }
-                catch { /* DB hatası sessizce geç */ }
+                catch { }
             }
 
-            // İlk sonucu göster
             if (AlgorithmResults.Count > 0)
                 SelectedResult = AlgorithmResults[0];
 
-            StatusMessage = $"✓ {results.Count} algoritma hesaplandı. " +
-                           $"En kısa mesafe: {bestDist:F2} birim.";
+            StatusMessage = LanguageResources.Format("StatusAlgorithmsComputed", results.Count, bestDist);
         }
 
         // ===== INotifyPropertyChanged =====

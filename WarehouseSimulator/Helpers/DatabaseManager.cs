@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Data.Sqlite;
 using WarehouseSimulator.Models;
+using WarehouseSimulator.Resources;
 
 namespace WarehouseSimulator.Helpers
 {
@@ -96,7 +97,7 @@ namespace WarehouseSimulator.Helpers
         public long SaveWarehouseConfig(Warehouse warehouse, string configName = "")
         {
             if (string.IsNullOrEmpty(configName))
-                configName = $"Depo_{DateTime.Now:yyyyMMdd_HHmmss}";
+                configName = LanguageResources.Format("DefaultConfigName", DateTime.Now);
 
             using var conn = new SqliteConnection(_connectionString);
             conn.Open();
@@ -211,10 +212,9 @@ namespace WarehouseSimulator.Helpers
             {
                 long id = reader.GetInt64(0);
                 string name = reader.GetString(1);
-                string details = $"{reader.GetInt32(2)} Blok, " +
-                                 $"{reader.GetInt32(3)} Koridor, " +
-                                 $"{reader.GetInt32(4)} Raf — " +
-                                 reader.GetString(5)[..16];
+                string details = LanguageResources.Format("ConfigDetailsFormat",
+                    reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4)) +
+                    reader.GetString(5)[..16];
                 list.Add((id, name, details));
             }
             return list;

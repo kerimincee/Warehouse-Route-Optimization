@@ -6,24 +6,18 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using WarehouseSimulator.Helpers;
 using WarehouseSimulator.Models;
+using WarehouseSimulator.Resources;
 using WarehouseSimulator.ViewModels;
 
 namespace WarehouseSimulator.Views
 {
-    /// <summary>
-    /// MainWindow.xaml için code-behind.
-    /// Depo görselleştirmesi ve kullanıcı etkileşimlerini yönetir.
-    /// </summary>
     public partial class MainWindow : Window
     {
-        // ViewModel referansı
         private MainViewModel ViewModel => (MainViewModel)DataContext;
 
-        // Renk sabitleri (görselleştirme için)
         private static readonly SolidColorBrush SHELF_NORMAL      = new(Color.FromRgb(0x2E, 0x86, 0xAB));
         private static readonly SolidColorBrush SHELF_SELECTED    = new(Color.FromRgb(0xFF, 0x6B, 0x35));
         private static readonly SolidColorBrush SHELF_HOVER       = new(Color.FromRgb(0xFF, 0xD1, 0x66));
@@ -33,10 +27,7 @@ namespace WarehouseSimulator.Views
         private static readonly SolidColorBrush BLOCK_HEADER_BG   = new(Color.FromArgb(0x60, 0x1A, 0x1D, 0x27));
         private static readonly SolidColorBrush GRID_LINE_COLOR   = new(Color.FromArgb(0x30, 0x2D, 0x32, 0x50));
 
-        // Canvas üzerindeki raf Rectangle'larının haritası
         private readonly Dictionary<string, Rectangle> _shelfRects = new();
-
-        // Son çizilen rota çizgileri
         private readonly List<UIElement> _routeElements = new();
 
         public MainWindow()
@@ -44,11 +35,14 @@ namespace WarehouseSimulator.Views
             InitializeComponent();
         }
 
-        // =========================================================
-        //  BUTON OLAYLARI
-        // =========================================================
+        private void CmbLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cmbLanguage.SelectedIndex == 0)
+                TranslationSource.Instance.SetLanguage("tr-TR");
+            else
+                TranslationSource.Instance.SetLanguage("en-US");
+        }
 
-        /// <summary>Depoyu Göster butonu</summary>
         private void BtnBuildWarehouse_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.BuildWarehouse();
@@ -56,7 +50,6 @@ namespace WarehouseSimulator.Views
                 DrawWarehouse(ViewModel.Warehouse);
         }
 
-        /// <summary>Rastgele Sipariş butonu</summary>
         private void BtnRandomOrder_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.GenerateRandomOrder();
@@ -64,7 +57,6 @@ namespace WarehouseSimulator.Views
                 RefreshShelfColors(ViewModel.Warehouse);
         }
 
-        /// <summary>Siparişi Temizle butonu</summary>
         private void BtnClearOrder_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.ClearOrder();
@@ -79,13 +71,11 @@ namespace WarehouseSimulator.Views
                 RefreshShelfColors(ViewModel.Warehouse);
         }
 
-        /// <summary>Rotaları Hesapla butonu</summary>
         private void BtnCalculateRoutes_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.CalculateAllRoutes();
         }
 
-        /// <summary>Bu Rotayı Göster butonu</summary>
         private void BtnShowRoute_Click(object sender, RoutedEventArgs e)
         {
             var viewModel = DataContext as MainViewModel;
@@ -93,7 +83,6 @@ namespace WarehouseSimulator.Views
                 DrawRoute(viewModel.SelectedResult, viewModel.Warehouse);
         }
 
-        /// <summary>DataGrid seçim değiştiğinde rotayı güncelle</summary>
         private void DgResults_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var viewModel = DataContext as MainViewModel;
@@ -101,14 +90,6 @@ namespace WarehouseSimulator.Views
                 DrawRoute(viewModel.SelectedResult, viewModel.Warehouse);
         }
 
-        // =========================================================
-        //  DEPO ÇİZİM METODLARI
-        // =========================================================
-
-        /// <summary>
-        /// Depoyu canvas üzerine çizer.
-        /// Grid tabanlı görselleştirme: Bloklar → Koridorlar → Raflar
-        /// </summary>
         private void DrawWarehouse(Warehouse warehouse)
         {
             warehouseCanvas.Children.Clear();
@@ -118,31 +99,23 @@ namespace WarehouseSimulator.Views
             double totalWidth  = WarehouseBuilder.CalculateTotalPixelWidth(warehouse);
             double totalHeight = WarehouseBuilder.CalculateTotalPixelHeight(warehouse);
 
-            // Canvas boyutunu güncelle
             warehouseCanvas.Width  = totalWidth  + WarehouseBuilder.MARGIN * 2 + 100;
             warehouseCanvas.Height = totalHeight + WarehouseBuilder.MARGIN * 2 + 80;
 
-            // Arka plan ızgara çizgileri
             DrawBackgroundGrid(warehouse);
 
-            // Her blok
             foreach (var block in warehouse.Blocks)
                 DrawBlock(block, warehouse);
 
-            // Kapıyı çiz
             DrawDoor(warehouse);
-
-            // Başlık etiketleri
             DrawLabels(warehouse);
         }
 
-        /// <summary>Arka plan ızgara çizgileri</summary>
         private void DrawBackgroundGrid(Warehouse warehouse)
         {
             double cW = warehouseCanvas.Width;
             double cH = warehouseCanvas.Height;
 
-            // Yatay çizgiler
             for (double y = WarehouseBuilder.MARGIN; y < cH - 20; y += WarehouseBuilder.SHELF_PIXEL_HEIGHT)
             {
                 var line = new Line
@@ -154,7 +127,6 @@ namespace WarehouseSimulator.Views
             }
         }
 
-        /// <summary>Tek bir bloğu çizer</summary>
         private void DrawBlock(Block block, Warehouse warehouse)
         {
             double blockGroupWidth = warehouse.AislesPerBlock *
@@ -165,7 +137,6 @@ namespace WarehouseSimulator.Views
 
             double blockHeight = warehouse.ShelvesPerAisle * WarehouseBuilder.SHELF_PIXEL_HEIGHT;
 
-            // Blok çerçevesi
             var blockRect = new Rectangle
             {
                 Width  = blockGroupWidth,
@@ -180,29 +151,25 @@ namespace WarehouseSimulator.Views
             Canvas.SetTop(blockRect, WarehouseBuilder.MARGIN);
             warehouseCanvas.Children.Add(blockRect);
 
-            // Blok başlığı
-            var blockLabel = CreateLabel($"BLOK {block.BlockIndex + 1}",
+            var blockLabel = CreateLabel(
+                LanguageResources.Format("BlockLabel", block.BlockIndex + 1),
                 Color.FromRgb(0x2E, 0x86, 0xAB), 11, FontWeights.Bold);
             Canvas.SetLeft(blockLabel, blockStartX + blockGroupWidth / 2 - 25);
             Canvas.SetTop(blockLabel, WarehouseBuilder.MARGIN - 22);
             warehouseCanvas.Children.Add(blockLabel);
 
-            // Her koridor
             foreach (var aisle in block.Aisles)
                 DrawAisle(aisle, blockStartX, warehouse);
 
-            // Arka plan (alt ve üst geçiş yolları)
-            DrawCrossAisle(blockStartX, blockGroupWidth, warehouse, "alt");
-            DrawCrossAisle(blockStartX, blockGroupWidth, warehouse, "üst");
+            DrawCrossAisle(blockStartX, blockGroupWidth, warehouse, "bottom");
+            DrawCrossAisle(blockStartX, blockGroupWidth, warehouse, "top");
         }
 
-        /// <summary>Tek bir koridoru çizer</summary>
         private void DrawAisle(Aisle aisle, double blockStartX, Warehouse warehouse)
         {
             double aisleGroupWidth = WarehouseBuilder.SHELF_PIXEL_WIDTH * 2 + WarehouseBuilder.AISLE_PIXEL_WIDTH;
             double aisleX = blockStartX + aisle.AisleIndex * aisleGroupWidth;
 
-            // Koridor geçiş alanı (koridorun kendi boşluğu)
             var aisleBg = new Rectangle
             {
                 Width  = WarehouseBuilder.AISLE_PIXEL_WIDTH,
@@ -213,8 +180,8 @@ namespace WarehouseSimulator.Views
             Canvas.SetTop(aisleBg, WarehouseBuilder.MARGIN);
             warehouseCanvas.Children.Add(aisleBg);
 
-            // Koridor numarası
-            var aisleLabel = CreateLabel($"K{aisle.AisleIndex + 1}",
+            var aisleLabel = CreateLabel(
+                LanguageResources.Format("AisleLabel", aisle.AisleIndex + 1),
                 Color.FromArgb(0x80, 0x8B, 0x92, 0xA8), 9, FontWeights.Normal);
             Canvas.SetLeft(aisleLabel,
                 aisleX + WarehouseBuilder.SHELF_PIXEL_WIDTH + WarehouseBuilder.AISLE_PIXEL_WIDTH / 2 - 8);
@@ -222,18 +189,16 @@ namespace WarehouseSimulator.Views
                 WarehouseBuilder.MARGIN + warehouse.ShelvesPerAisle * WarehouseBuilder.SHELF_PIXEL_HEIGHT + 3);
             warehouseCanvas.Children.Add(aisleLabel);
 
-            // Her raf
             foreach (var shelf in aisle.Shelves)
                 DrawShelf(shelf, aisleX, warehouse);
         }
 
-        /// <summary>Tek bir raf kutucuğunu çizer ve tıklama olayını bağlar</summary>
         private void DrawShelf(ShelfLocation shelf, double aisleX, Warehouse warehouse)
         {
             double shelfX, shelfY;
 
             if (shelf.Side == 0)
-                shelfX = aisleX; // Sol raf
+                shelfX = aisleX;
             else
                 shelfX = aisleX + WarehouseBuilder.SHELF_PIXEL_WIDTH + WarehouseBuilder.AISLE_PIXEL_WIDTH;
 
@@ -249,13 +214,11 @@ namespace WarehouseSimulator.Views
                 Tag = shelf
             };
 
-            // Tooltip
             rect.ToolTip = new ToolTip
             {
-                Content = $"📦 {shelf.Label}\nTıklayın: Seç/Kaldır"
+                Content = LanguageResources.Format("ShelfTooltip", shelf.Label)
             };
 
-            // Hover animasyonu
             rect.MouseEnter += (s, e) =>
             {
                 if (!shelf.IsSelected)
@@ -270,7 +233,6 @@ namespace WarehouseSimulator.Views
                 ((Rectangle)s!).RenderTransform = null;
             };
 
-            // Tıklama: Manuel seçim
             rect.MouseLeftButtonDown += (s, e) =>
             {
                 ViewModel.ToggleShelf(shelf);
@@ -281,7 +243,6 @@ namespace WarehouseSimulator.Views
             Canvas.SetLeft(rect, shelfX + 1);
             Canvas.SetTop(rect, shelfY + 1);
 
-            // Çok küçük boyutlarda raf numarası gösterme
             if (WarehouseBuilder.SHELF_PIXEL_HEIGHT >= 18)
             {
                 var label = new TextBlock
@@ -301,10 +262,9 @@ namespace WarehouseSimulator.Views
             _shelfRects[shelf.UniqueId] = rect;
         }
 
-        /// <summary>Alt/üst geçiş koridorunu çizer</summary>
         private void DrawCrossAisle(double blockStartX, double blockGroupWidth, Warehouse warehouse, string position)
         {
-            double y = position == "alt"
+            double y = position == "bottom"
                 ? WarehouseBuilder.MARGIN + warehouse.ShelvesPerAisle * WarehouseBuilder.SHELF_PIXEL_HEIGHT
                 : WarehouseBuilder.MARGIN - WarehouseBuilder.CROSS_AISLE_PIXEL_HEIGHT;
 
@@ -318,20 +278,20 @@ namespace WarehouseSimulator.Views
             Canvas.SetTop(crossRect, y);
             warehouseCanvas.Children.Add(crossRect);
 
-            var label = CreateLabel(
-                position == "alt" ? "Alt Geçiş" : "Üst Geçiş",
+            var labelText = position == "bottom"
+                ? LanguageResources.GetString("BottomCrossAisle")
+                : LanguageResources.GetString("TopCrossAisle");
+            var label = CreateLabel(labelText,
                 Color.FromArgb(0x60, 0x06, 0xD6, 0xA0), 9, FontWeights.Normal);
             Canvas.SetLeft(label, blockStartX + 4);
             Canvas.SetTop(label, y + 8);
             warehouseCanvas.Children.Add(label);
         }
 
-        /// <summary>Kapı sembolünü çizer</summary>
         private void DrawDoor(Warehouse warehouse)
         {
             var (doorX, doorY) = WarehouseBuilder.GetDoorPixelPosition(warehouse);
 
-            // Kapı ikonu
             var doorEllipse = new Ellipse
             {
                 Width = 28, Height = 28,
@@ -352,22 +312,19 @@ namespace WarehouseSimulator.Views
             Canvas.SetTop(doorIcon, doorY - 11);
             warehouseCanvas.Children.Add(doorIcon);
 
-            // Etiket
-            var doorLabel = CreateLabel("KAPI / Başlangıç",
+            var doorLabel = CreateLabel(
+                LanguageResources.GetString("DoorLabel"),
                 Color.FromRgb(0x06, 0xD6, 0xA0), 9, FontWeights.SemiBold);
             Canvas.SetLeft(doorLabel, doorX - 30);
             Canvas.SetTop(doorLabel, doorY + 16);
             warehouseCanvas.Children.Add(doorLabel);
         }
 
-        /// <summary>Genel etiket (ölçek/başlık) çizer</summary>
         private void DrawLabels(Warehouse warehouse)
         {
-            // Depo özet etiketi
             var summary = CreateLabel(
-                $"Toplam: {warehouse.TotalShelves} raf | " +
-                $"{warehouse.TotalAisles} koridor | " +
-                $"{warehouse.BlockCount} blok",
+                LanguageResources.Format("SummaryFormat",
+                    warehouse.TotalShelves, warehouse.TotalAisles, warehouse.BlockCount),
                 Color.FromRgb(0x8B, 0x92, 0xA8), 10, FontWeights.Normal);
             Canvas.SetLeft(summary, WarehouseBuilder.MARGIN);
             Canvas.SetTop(summary,
@@ -377,33 +334,18 @@ namespace WarehouseSimulator.Views
             warehouseCanvas.Children.Add(summary);
         }
 
-        // =========================================================
-        //  ROTA ÇİZİM METODLARI
-        // =========================================================
-
-        /// <summary>
-        /// Seçili algoritma sonucunun rotasını canvas üzerine çizer.
-        /// Rota noktaları piksel koordinatlarına dönüştürülür ve
-        /// animasyonlu kırmızı çizgilerle bağlanır.
-        /// </summary>
         private void DrawRoute(RouteResult result, Warehouse warehouse)
         {
             ClearRouteVisualization();
 
             if (result.RoutePoints.Count < 2) return;
 
-            // Birim koordinatlarını piksel koordinatlarına çeviren fonksiyon
             (double px, double py) ToPixel(WarehousePoint p)
             {
-                // X: birim değerini piksel ölçeğine çevir
-                // Bir blok grubu: aislesPerBlock * (sol_raf + koridor + sağ_raf)
-                double unitToPixelX = WarehouseBuilder.SHELF_PIXEL_WIDTH + WarehouseBuilder.AISLE_PIXEL_WIDTH / 2;
-
                 double aisleGroupUnit = warehouse.ShelfWidth * 2 + 1.0;
                 double aisleGroupPixel = WarehouseBuilder.SHELF_PIXEL_WIDTH * 2 + WarehouseBuilder.AISLE_PIXEL_WIDTH;
                 double blockUnitWidth = warehouse.AislesPerBlock * aisleGroupUnit;
                 double blockPixelWidth = warehouse.AislesPerBlock * aisleGroupPixel;
-                double crossPixel = WarehouseBuilder.CROSS_AISLE_PIXEL_HEIGHT * 2;
 
                 double scale = blockUnitWidth > 0 ? blockPixelWidth / blockUnitWidth : 1.0;
 
@@ -412,19 +354,16 @@ namespace WarehouseSimulator.Views
 
                 if (p.Y < 0)
                 {
-                    // Kapı: rafların üstünde
                     calcY = WarehouseBuilder.MARGIN - WarehouseBuilder.CROSS_AISLE_PIXEL_HEIGHT / 2;
                 }
                 else if (p.Y > warehouse.AisleLength - 0.01)
                 {
-                    // Üst geçiş
                     calcY = WarehouseBuilder.MARGIN +
                          warehouse.ShelvesPerAisle * WarehouseBuilder.SHELF_PIXEL_HEIGHT +
                          WarehouseBuilder.CROSS_AISLE_PIXEL_HEIGHT / 2;
                 }
                 else
                 {
-                    // Raf içi: birim Y'yi piksel Y'ye çevir
                     double rowScale = WarehouseBuilder.SHELF_PIXEL_HEIGHT;
                     double unitPerRow = warehouse.AisleLength / warehouse.ShelvesPerAisle;
                     calcY = WarehouseBuilder.MARGIN + (p.Y / unitPerRow) * rowScale + rowScale / 2;
@@ -433,7 +372,6 @@ namespace WarehouseSimulator.Views
                 return (calcX, calcY);
             }
 
-            // Rota çizgilerini çiz
             for (int i = 0; i < result.RoutePoints.Count - 1; i++)
             {
                 var (x1, y1) = ToPixel(result.RoutePoints[i]);
@@ -456,13 +394,11 @@ namespace WarehouseSimulator.Views
                 _routeElements.Add(line);
             }
 
-            // Rota noktalarını işaretle (toplama noktaları)
             int seq = 1;
             foreach (var pt in result.RoutePoints.Skip(1).Take(result.RoutePoints.Count - 2))
             {
                 var (px, py) = ToPixel(pt);
 
-                // Küçük daire
                 var circle = new Ellipse
                 {
                     Width = 10, Height = 10,
@@ -476,7 +412,6 @@ namespace WarehouseSimulator.Views
                 warehouseCanvas.Children.Add(circle);
                 _routeElements.Add(circle);
 
-                // Sıra numarası
                 var numLabel = new TextBlock
                 {
                     Text = seq.ToString(),
@@ -495,7 +430,6 @@ namespace WarehouseSimulator.Views
             }
         }
 
-        /// <summary>Rota görselleştirmesini temizler (raf renkleri korunur)</summary>
         private void ClearRouteVisualization()
         {
             foreach (var elem in _routeElements)
@@ -503,7 +437,6 @@ namespace WarehouseSimulator.Views
             _routeElements.Clear();
         }
 
-        /// <summary>Tüm raf renklerini güncel IsSelected değerine göre yeniler</summary>
         private void RefreshShelfColors(Warehouse warehouse)
         {
             var allShelves = warehouse.GetAllShelves();
@@ -518,7 +451,6 @@ namespace WarehouseSimulator.Views
 
                     if (ViewModel.IsHeatmapVisible)
                     {
-                        // Isı haritası: Mavi (soğuk) -> Kırmızı (sıcak) geçişi
                         double intensity = (double)shelf.PickCount / maxPicks;
                         targetColor = Color.FromRgb(
                             (byte)(46 + (255 - 46) * intensity),
@@ -529,8 +461,8 @@ namespace WarehouseSimulator.Views
                     else
                     {
                         targetColor = shelf.IsSelected
-                            ? Color.FromRgb(0xFF, 0x6B, 0x35) // Turuncu (Seçili)
-                            : Color.FromRgb(0x2E, 0x86, 0xAB); // Mavi (Normal)
+                            ? Color.FromRgb(0xFF, 0x6B, 0x35)
+                            : Color.FromRgb(0x2E, 0x86, 0xAB);
                     }
 
                     rect.Fill = new SolidColorBrush(targetColor);
@@ -538,11 +470,6 @@ namespace WarehouseSimulator.Views
             }
         }
 
-        // =========================================================
-        //  YARDIMCI METODLAR
-        // =========================================================
-
-        /// <summary>Styled TextBlock etiketi oluşturur</summary>
         private TextBlock CreateLabel(string text, Color color, double fontSize, FontWeight weight) =>
             new()
             {
@@ -555,13 +482,6 @@ namespace WarehouseSimulator.Views
             };
     }
 
-    // =========================================================
-    //  DÖNÜŞTÜRÜCÜLER (Value Converters)
-    // =========================================================
-
-    /// <summary>
-    /// Boolean → Visibility dönüştürücü (XAML için)
-    /// </summary>
     public class BooleanToVisibilityConverter : System.Windows.Data.IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
@@ -571,9 +491,6 @@ namespace WarehouseSimulator.Views
             value is Visibility.Visible;
     }
 
-    /// <summary>
-    /// Null kontrolü → Visibility (null ise Collapsed, değilse Visible)
-    /// </summary>
     public class NullToVisibilityConverter : System.Windows.Data.IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>

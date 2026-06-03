@@ -3,7 +3,7 @@
   <PropertyGroup>
     <!-- WPF Windows uygulaması için hedef çerçeve -->
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <!-- WPF'i etkinleştir -->
@@ -18,5 +18,6 @@
     <!-- NuGet bağımlılıkları -->
     <PackageReference Include="Microsoft.Data.Sqlite" Version="7.0.0" />
   </ItemGroup>
+
 
 </Project>

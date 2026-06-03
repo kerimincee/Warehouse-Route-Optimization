@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using WarehouseSimulator.Models;
+using WarehouseSimulator.Resources;
 
 namespace WarehouseSimulator.Helpers
 {
@@ -47,9 +48,9 @@ namespace WarehouseSimulator.Helpers
             double crossAisleDistance = 3.0)
         {
             // Parametre doğrulama
-            if (blockCount < 1) throw new ArgumentException("Blok sayısı en az 1 olmalıdır.");
-            if (aislesPerBlock < 1) throw new ArgumentException("Koridor sayısı en az 1 olmalıdır.");
-            if (shelvesPerAisle < 1) throw new ArgumentException("Raf sayısı en az 1 olmalıdır.");
+            if (blockCount < 1) throw new ArgumentException(LanguageResources.GetString("BlockCountMin"));
+            if (aislesPerBlock < 1) throw new ArgumentException(LanguageResources.GetString("AisleCountMin"));
+            if (shelvesPerAisle < 1) throw new ArgumentException(LanguageResources.GetString("ShelfCountMin"));
 
             var warehouse = new Warehouse
             {

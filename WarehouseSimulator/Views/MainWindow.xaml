@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:WarehouseSimulator.ViewModels"
         xmlns:local="clr-namespace:WarehouseSimulator.Views"
-        Title="🏭 Depo Rota Optimizasyonu — Roodbergen Interactive Warehouse"
+        xmlns:res="clr-namespace:WarehouseSimulator.Resources"
+        Title="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[WindowTitle]}"
         Height="820" Width="1400"
         MinHeight="700" MinWidth="1100"
         WindowStartupLocation="CenterScreen"
@@ -20,16 +21,13 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <!-- Başlık barı -->
             <RowDefinition Height="56"/>
-            <!-- Ana içerik -->
             <RowDefinition Height="*"/>
-            <!-- Durum barı -->
             <RowDefinition Height="32"/>
         </Grid.RowDefinitions>
 
         <!-- ========================================= -->
-        <!--  BAŞLIK BARI                              -->
+        <!--  HEADER BAR                              -->
         <!-- ========================================= -->
         <Border Grid.Row="0"
                 Background="{StaticResource BrushBackgroundMid}"
@@ -42,34 +40,34 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Logo + Başlık -->
+                <!-- Logo + Title -->
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock Text="📦" FontSize="24" Margin="0,0,10,0" VerticalAlignment="Center"/>
                     <StackPanel VerticalAlignment="Center">
-                        <TextBlock Text="DEPO ROTA OPTİMİZASYONU"
+                        <TextBlock Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[AppTitle]}"
                                    Foreground="{StaticResource BrushTextPrimary}"
                                    FontFamily="Segoe UI"
                                    FontWeight="Bold"
                                    FontSize="16"/>
-                        <TextBlock Text="Roodbergen Interactive Warehouse Simulator"
+                        <TextBlock Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[AppSubtitle]}"
                                    Foreground="{StaticResource BrushTextSecondary}"
                                    FontFamily="Segoe UI"
                                    FontSize="11"/>
                     </StackPanel>
                 </StackPanel>
 
-                <!-- Özet bilgi -->
+                <!-- Summary info -->
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center"
                             Visibility="{Binding IsWarehouseBuilt, Converter={StaticResource BoolToVis}}">
                     <Border Background="{StaticResource BrushBackgroundLight}"
                             CornerRadius="20" Padding="12,4" Margin="8,0">
                         <TextBlock Foreground="{StaticResource BrushAccentBlue}"
                                    FontFamily="Segoe UI" FontSize="12">
-                            <Run Text="🔷 Blok: "/>
+                            <Run Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[HeaderBlock]}"/>
                             <Run Text="{Binding BlockCount, Mode=OneWay}"/>
-                            <Run Text=" | Koridor: "/>
+                            <Run Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[HeaderAisle]}"/>
                             <Run Text="{Binding AislesPerBlock, Mode=OneWay}"/>
-                            <Run Text=" | Raf/Koridor: "/>
+                            <Run Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[HeaderShelfPerAisle]}"/>
                             <Run Text="{Binding ShelvesPerAisle, Mode=OneWay}"/>
                         </TextBlock>
                     </Border>
@@ -78,99 +76,96 @@
         </Border>
 
         <!-- ========================================= -->
-        <!--  ANA İÇERİK (3 Sütun)                    -->
+        <!--  MAIN CONTENT (3 Columns)                -->
         <!-- ========================================= -->
         <Grid Grid.Row="1" Margin="12,10,12,10">
             <Grid.ColumnDefinitions>
-                <!-- Sol panel: Parametreler -->
                 <ColumnDefinition Width="240"/>
-                <!-- Orta: Depo görselleştirme -->
                 <ColumnDefinition Width="*"/>
-                <!-- Sağ panel: Sonuçlar -->
                 <ColumnDefinition Width="280"/>
             </Grid.ColumnDefinitions>
 
             <!-- ===================================== -->
-            <!--  SOL PANEL: Parametreler              -->
+            <!--  LEFT PANEL: Parameters              -->
             <!-- ===================================== -->
             <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="0,0,8,0">
                 <StackPanel>
 
-                    <!-- Depo Tasarımı Kartı -->
+                    <!-- Warehouse Design Card -->
                     <Border Style="{StaticResource CardBorder}" Margin="0,0,0,8">
                         <StackPanel>
-                            <TextBlock Text="⚙️  DEPO TASARIMI" Style="{StaticResource SectionHeader}"/>
+                            <TextBlock Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[WarehouseDesign]}" Style="{StaticResource SectionHeader}"/>
 
-                            <TextBlock Text="Blok Sayısı" Style="{StaticResource FieldLabel}"/>
+                            <TextBlock Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[BlockCount]}" Style="{StaticResource FieldLabel}"/>
                             <TextBox x:Name="txtBlockCount" Style="{StaticResource ModernTextBox}"
                                      Text="{Binding BlockCount, UpdateSourceTrigger=PropertyChanged}"/>
 
-                            <TextBlock Text="Koridor Sayısı (Blok başına)" Style="{StaticResource FieldLabel}"/>
+                            <TextBlock Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[AisleCount]}" Style="{StaticResource FieldLabel}"/>
                             <TextBox x:Name="txtAisles" Style="{StaticResource ModernTextBox}"
                                      Text="{Binding AislesPerBlock, UpdateSourceTrigger=PropertyChanged}"/>
 
-                            <TextBlock Text="Raf Sayısı (Koridor başına)" Style="{StaticResource FieldLabel}"/>
+                            <TextBlock Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[ShelfCount]}" Style="{StaticResource FieldLabel}"/>
                             <TextBox x:Name="txtShelves" Style="{StaticResource ModernTextBox}"
                                      Text="{Binding ShelvesPerAisle, UpdateSourceTrigger=PropertyChanged}"/>
 
-                            <TextBlock Text="Kapı Lokasyonu" Style="{StaticResource FieldLabel}"/>
+                            <TextBlock Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[DoorLocation]}" Style="{StaticResource FieldLabel}"/>
                             <ComboBox x:Name="cmbDoor" Style="{StaticResource ModernComboBox}"
                                       SelectedIndex="{Binding DoorLocation}"
                                       Margin="0,0,0,4">
-                                <ComboBoxItem Content="🚪 Sol (Başlangıç)"/>
-                                <ComboBoxItem Content="🚪 Sağ (Son)"/>
-                                <ComboBoxItem Content="🚪 Orta"/>
+                                <ComboBoxItem Content="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[DoorLeft]}"/>
+                                <ComboBoxItem Content="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[DoorRight]}"/>
+                                <ComboBoxItem Content="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[DoorCenter]}"/>
                             </ComboBox>
 
-                            <!-- Opsiyonel: Mesafe parametreleri -->
-                            <Expander Header="📏 Mesafe Parametreleri"
+                            <!-- Optional: Distance parameters -->
+                            <Expander Header="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[DistanceParameters]}"
                                       Foreground="{StaticResource BrushTextSecondary}"
                                       Margin="0,6,0,0">
                                 <StackPanel Margin="0,4,0,0">
-                                    <TextBlock Text="Koridor Uzunluğu (birim)" Style="{StaticResource FieldLabel}"/>
+                                    <TextBlock Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[AisleLength]}" Style="{StaticResource FieldLabel}"/>
                                     <TextBox Style="{StaticResource ModernTextBox}"
                                              Text="{Binding AisleLength, UpdateSourceTrigger=PropertyChanged}"/>
 
-                                    <TextBlock Text="Geçiş Mesafesi (birim)" Style="{StaticResource FieldLabel}"/>
+                                    <TextBlock Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[CrossAisleDistance]}" Style="{StaticResource FieldLabel}"/>
                                     <TextBox Style="{StaticResource ModernTextBox}"
                                              Text="{Binding CrossAisleDistance, UpdateSourceTrigger=PropertyChanged}"/>
                                 </StackPanel>
                             </Expander>
 
-                            <Button Content="🏗️  Depoyu Göster"
+                            <Button Content="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[ShowWarehouse]}"
                                     Style="{StaticResource PrimaryButton}"
                                     Click="BtnBuildWarehouse_Click"
                                     Margin="0,12,0,0"/>
                         </StackPanel>
                     </Border>
 
-                    <!-- Sipariş Oluşturma Kartı -->
+                    <!-- Order Creation Card -->
                     <Border Style="{StaticResource CardBorder}" Margin="0,0,0,8"
                             IsEnabled="{Binding IsWarehouseBuilt}">
                         <StackPanel>
-                            <TextBlock Text="🛒  SİPARİŞ OLUŞTURMA" Style="{StaticResource SectionHeader}"/>
+                            <TextBlock Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[OrderCreation]}" Style="{StaticResource SectionHeader}"/>
 
-                            <TextBlock Text="Rastgele Ürün Sayısı" Style="{StaticResource FieldLabel}"/>
+                            <TextBlock Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[RandomProductCount]}" Style="{StaticResource FieldLabel}"/>
                             <TextBox Style="{StaticResource ModernTextBox}"
                                      Text="{Binding RandomOrderCount, UpdateSourceTrigger=PropertyChanged}"/>
 
-                            <Button Content="🎲  Rastgele Sipariş"
+                            <Button Content="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[RandomOrder]}"
                                     Style="{StaticResource SuccessButton}"
                                     Click="BtnRandomOrder_Click"
                                     Margin="0,8,0,4"/>
 
-                            <TextBlock Text="veya harita üzerindeki raflara tıklayın"
+                            <TextBlock Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[OrClickShelves]}"
                                        Foreground="{StaticResource BrushTextSecondary}"
                                        FontFamily="Segoe UI" FontSize="10"
                                        HorizontalAlignment="Center"
                                        Margin="0,4,0,4"/>
 
-                            <Button Content="🗑️  Siparişi Temizle"
+                            <Button Content="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[ClearOrder]}"
                                     Style="{StaticResource DangerButton}"
                                     Click="BtnClearOrder_Click"
                                     Margin="0,0,0,8"/>
 
-                            <CheckBox Content="🔥 Isı Haritasını Göster"
+                            <CheckBox Content="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[ShowHeatmap]}"
                                       IsChecked="{Binding IsHeatmapVisible}"
                                       Foreground="{StaticResource BrushTextSecondary}"
                                       FontFamily="Segoe UI" FontSize="11"
@@ -178,12 +173,12 @@
                                       Checked="Heatmap_Changed"
                                       Unchecked="Heatmap_Changed"/>
 
-                            <!-- Sipariş özeti -->
+                            <!-- Order summary -->
                             <Border Background="{StaticResource BrushBackgroundLight}"
                                     CornerRadius="6" Padding="8" Margin="0,8,0,0"
                                     Visibility="{Binding HasOrder, Converter={StaticResource BoolToVis}}">
                                 <TextBlock FontFamily="Segoe UI" FontSize="12">
-                                    <Run Text="✅ Seçili Ürün: " Foreground="{StaticResource BrushTextSecondary}"/>
+                                    <Run Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[SelectedProduct]}" Foreground="{StaticResource BrushTextSecondary}"/>
                                     <Run Text="{Binding CurrentOrder.ItemCount, Mode=OneWay}"
                                          Foreground="{StaticResource BrushAccentGreen}"
                                          FontWeight="Bold"/>
@@ -192,19 +187,19 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- Algoritma Kartı -->
+                    <!-- Algorithm Card -->
                     <Border Style="{StaticResource CardBorder}"
                             IsEnabled="{Binding HasOrder}">
                         <StackPanel>
-                            <TextBlock Text="🧮  ROTA HESAPLAMA" Style="{StaticResource SectionHeader}"/>
+                            <TextBlock Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[RouteCalculation]}" Style="{StaticResource SectionHeader}"/>
 
-                            <TextBlock Text="Tüm algoritmalar otomatik çalıştırılır ve karşılaştırılır."
+                            <TextBlock Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[AutoRunDescription]}"
                                        Foreground="{StaticResource BrushTextSecondary}"
                                        FontFamily="Segoe UI" FontSize="10"
                                        TextWrapping="Wrap"
                                        Margin="0,0,0,8"/>
 
-                            <Button Content="⚡  Tüm Rotaları Hesapla"
+                            <Button Content="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[CalculateAllRoutes]}"
                                     Style="{StaticResource WarningButton}"
                                     Click="BtnCalculateRoutes_Click"/>
                         </StackPanel>
@@ -214,7 +209,7 @@
             </ScrollViewer>
 
             <!-- ===================================== -->
-            <!--  ORTA: Depo Görselleştirme           -->
+            <!--  CENTER: Warehouse Visualization    -->
             <!-- ===================================== -->
             <Border Grid.Column="1"
                     Style="{StaticResource CardBorder}"
@@ -226,14 +221,14 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Görselleştirme başlığı -->
+                    <!-- Visualization header -->
                     <Border Grid.Row="0"
                             Background="{StaticResource BrushBackgroundLight}"
                             CornerRadius="10,10,0,0"
                             Padding="14,8">
                         <Grid>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="🗺️  DEPO HARİTASI"
+                                <TextBlock Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[WarehouseMap]}"
                                            Foreground="{StaticResource BrushAccentBlue}"
                                            FontFamily="Segoe UI"
                                            FontWeight="Bold" FontSize="12"/>
@@ -242,19 +237,19 @@
                             <!-- Legend -->
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                 <Rectangle Width="14" Height="14" Fill="#FF2E86AB" RadiusX="2" RadiusY="2" Margin="0,0,4,0"/>
-                                <TextBlock Text="Raf" Foreground="{StaticResource BrushTextSecondary}"
+                                <TextBlock Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[LegendRack]}" Foreground="{StaticResource BrushTextSecondary}"
                                            FontSize="10" Margin="0,0,12,0"/>
                                 <Rectangle Width="14" Height="14" Fill="#FFFF6B35" RadiusX="2" RadiusY="2" Margin="0,0,4,0"/>
-                                <TextBlock Text="Seçili" Foreground="{StaticResource BrushTextSecondary}"
+                                <TextBlock Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[LegendSelected]}" Foreground="{StaticResource BrushTextSecondary}"
                                            FontSize="10" Margin="0,0,12,0"/>
                                 <Rectangle Width="14" Height="14" Fill="#FFFF2D2D" RadiusX="2" RadiusY="2" Margin="0,0,4,0"/>
-                                <TextBlock Text="Rota" Foreground="{StaticResource BrushTextSecondary}"
+                                <TextBlock Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[LegendRoute]}" Foreground="{StaticResource BrushTextSecondary}"
                                            FontSize="10"/>
                             </StackPanel>
                         </Grid>
                     </Border>
 
-                    <!-- Canvas kapsayıcı -->
+                    <!-- Canvas container -->
                     <ScrollViewer Grid.Row="1"
                                   HorizontalScrollBarVisibility="Auto"
                                   VerticalScrollBarVisibility="Auto"
@@ -262,14 +257,13 @@
                         <Canvas x:Name="warehouseCanvas"
                                 Background="{StaticResource BrushBackgroundDark}"
                                 Width="2000" Height="1000">
-                            <!-- Dinamik içerik C# code-behind'dan eklenir -->
                         </Canvas>
                     </ScrollViewer>
                 </Grid>
             </Border>
 
             <!-- ===================================== -->
-            <!--  SAĞ PANEL: Sonuçlar                 -->
+            <!--  RIGHT PANEL: Results               -->
             <!-- ===================================== -->
             <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
@@ -277,7 +271,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <!-- Algoritma Sonuçları Kartı -->
+                <!-- Algorithm Results Card -->
                 <Border Grid.Row="0" Style="{StaticResource CardBorder}" Margin="0,0,0,8">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -285,7 +279,7 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Text="📊  ALGORİTMA KARŞILAŞTIRMASI"
+                        <TextBlock Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[AlgorithmComparison]}"
                                    Style="{StaticResource SectionHeader}"/>
 
                         <DataGrid Grid.Row="1"
@@ -296,7 +290,6 @@
                                   SelectionChanged="DgResults_SelectionChanged"
                                   ColumnHeaderStyle="{StaticResource ModernDataGridColumnHeader}">
                             <DataGrid.Columns>
-                                <!-- En iyi işareti -->
                                 <DataGridTemplateColumn Header="⭐" Width="28">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
@@ -309,8 +302,7 @@
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
 
-                                <!-- Algoritma adı -->
-                                <DataGridTextColumn Header="Algoritma"
+                                <DataGridTextColumn Header="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[ColAlgorithm]}"
                                                    Binding="{Binding AlgorithmName}"
                                                    Width="*">
                                     <DataGridTextColumn.ElementStyle>
@@ -323,8 +315,7 @@
                                     </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
 
-                                <!-- Mesafe -->
-                                <DataGridTextColumn Header="Mesafe"
+                                <DataGridTextColumn Header="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[ColDistance]}"
                                                    Binding="{Binding TotalDistance, StringFormat={}{0:F1}}"
                                                    Width="65">
                                     <DataGridTextColumn.ElementStyle>
@@ -339,7 +330,6 @@
                                 </DataGridTextColumn>
                             </DataGrid.Columns>
 
-                            <!-- Seçili satır rengi -->
                             <DataGrid.RowStyle>
                                 <Style TargetType="DataGridRow">
                                     <Style.Triggers>
@@ -357,12 +347,12 @@
                     </Grid>
                 </Border>
 
-                <!-- Seçili Rota Detay Kartı -->
+                <!-- Selected Route Detail Card -->
                 <Border Grid.Row="1" Style="{StaticResource CardBorder}"
                         Visibility="{Binding SelectedResult,
                             Converter={StaticResource NullToVis}}">
                     <StackPanel>
-                        <TextBlock Text="🔍  ROTA DETAYI" Style="{StaticResource SectionHeader}"/>
+                        <TextBlock Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[RouteDetail]}" Style="{StaticResource SectionHeader}"/>
 
                         <TextBlock x:Name="txtAlgoName"
                                    Text="{Binding SelectedResult.AlgorithmName}"
@@ -385,37 +375,41 @@
                             <Border Grid.Column="0" Background="{StaticResource BrushBackgroundLight}"
                                     CornerRadius="6" Padding="8" Margin="0,0,4,0">
                                 <StackPanel>
-                                    <TextBlock Text="TOPLAM MESAFE"
+                                    <TextBlock Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[TotalDistance]}"
                                                Foreground="{StaticResource BrushTextSecondary}"
                                                FontSize="9" FontFamily="Segoe UI"/>
-                                    <TextBlock Text="{Binding SelectedResult.TotalDistance, StringFormat={}{0:F2} birim}"
-                                               Foreground="{StaticResource BrushAccentYellow}"
+                                    <TextBlock Foreground="{StaticResource BrushAccentYellow}"
                                                FontWeight="Bold" FontSize="14"
-                                               FontFamily="Segoe UI"/>
+                                               FontFamily="Segoe UI">
+                                        <Run Text="{Binding SelectedResult.TotalDistance, StringFormat={}{0:F2}}"/>
+                                        <Run Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[UnitDistance]}"/>
+                                    </TextBlock>
                                 </StackPanel>
                             </Border>
 
                             <Border Grid.Column="1" Background="{StaticResource BrushBackgroundLight}"
                                     CornerRadius="6" Padding="8" Margin="4,0,0,0">
                                 <StackPanel>
-                                    <TextBlock Text="HESAPLAMA SÜRESİ"
+                                    <TextBlock Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[ComputationTime]}"
                                                Foreground="{StaticResource BrushTextSecondary}"
                                                FontSize="9" FontFamily="Segoe UI"/>
-                                    <TextBlock Text="{Binding SelectedResult.ComputationTimeMs, StringFormat={}{0:F1} ms}"
-                                               Foreground="{StaticResource BrushAccentGreen}"
+                                    <TextBlock Foreground="{StaticResource BrushAccentGreen}"
                                                FontWeight="Bold" FontSize="14"
-                                               FontFamily="Segoe UI"/>
+                                               FontFamily="Segoe UI">
+                                        <Run Text="{Binding SelectedResult.ComputationTimeMs, StringFormat={}{0:F1}}"/>
+                                        <Run Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[UnitMs]}"/>
+                                    </TextBlock>
                                 </StackPanel>
                             </Border>
                         </Grid>
 
-                        <Button Content="🎨  Bu Rotayı Göster"
+                        <Button Content="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[ShowThisRoute]}"
                                 Style="{StaticResource PrimaryButton}"
                                 Click="BtnShowRoute_Click"
                                 Margin="0,10,0,0"/>
 
-                        <!-- Sipariş sırası listesi -->
-                        <TextBlock Text="Toplama Sırası:" Style="{StaticResource FieldLabel}" Margin="0,8,0,2"/>
+                        <!-- Pick order list -->
+                        <TextBlock Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[PickOrder]}" Style="{StaticResource FieldLabel}" Margin="0,8,0,2"/>
                         <ListBox x:Name="lbPickOrder"
                                  ItemsSource="{Binding SelectedResult.PickOrder}"
                                  Background="{StaticResource BrushBackgroundLight}"
@@ -445,7 +439,7 @@
         </Grid>
 
         <!-- ========================================= -->
-        <!--  DURUM BARI                              -->
+        <!--  STATUS BAR                             -->
         <!-- ========================================= -->
         <Border Grid.Row="2"
                 Background="{StaticResource BrushBackgroundMid}"
@@ -456,12 +450,26 @@
                            Foreground="{StaticResource BrushTextSecondary}"
                            FontFamily="Segoe UI" FontSize="11"
                            VerticalAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center"
-                           Foreground="{StaticResource BrushTextSecondary}"
-                           FontFamily="Segoe UI" FontSize="10">
-                    <Run Text="Roodbergen IWS · "/>
-                    <Run Text="5 Algoritma"/>
-                </TextBlock>
+                <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal">
+                    <TextBlock Foreground="{StaticResource BrushTextSecondary}"
+                               FontFamily="Segoe UI" FontSize="10"
+                               VerticalAlignment="Center">
+                        <Run Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[FooterText]}"/>
+                        <Run Text="{Binding Source={x:Static res:TranslationSource.Instance}, Path=[FooterAlgorithms]}"/>
+                    </TextBlock>
+                    <!-- Language Switcher -->
+                    <ComboBox x:Name="cmbLanguage" SelectedIndex="0"
+                              Background="{StaticResource BrushBackgroundLight}"
+                              Foreground="{StaticResource BrushTextPrimary}"
+                              BorderBrush="{StaticResource BrushBorder}"
+                              FontFamily="Segoe UI" FontSize="10"
+                              Padding="4,2" Margin="12,0,0,0"
+                              Width="90"
+                              SelectionChanged="CmbLanguage_SelectionChanged">
+                        <ComboBoxItem Content="🇹🇷 Türkçe"/>
+                        <ComboBoxItem Content="🇬🇧 English"/>
+                    </ComboBox>
+                </StackPanel>
             </Grid>
         </Border>
     </Grid>

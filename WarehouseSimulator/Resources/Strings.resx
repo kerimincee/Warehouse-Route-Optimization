@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">text/microsoft-resx</resheader>
+  <resheader name="version">2.0</resheader>
+  <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</resheader>
+  <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</resheader>
+
+  <!-- MainWindow -->
+  <data name="WindowTitle" xml:space="preserve"><value>🏭 Depo Rota Optimizasyonu — Roodbergen Interactive Warehouse</value></data>
+  <data name="AppTitle" xml:space="preserve"><value>DEPO ROTA OPTİMİZASYONU</value></data>
+  <data name="AppSubtitle" xml:space="preserve"><value>Roodbergen Interactive Warehouse Simulator</value></data>
+  <data name="HeaderBlock" xml:space="preserve"><value>🔷 Blok: </value></data>
+  <data name="HeaderAisle" xml:space="preserve"><value> | Koridor: </value></data>
+  <data name="HeaderShelfPerAisle" xml:space="preserve"><value> | Raf/Koridor: </value></data>
+  <data name="WarehouseDesign" xml:space="preserve"><value>⚙️  DEPO TASARIMI</value></data>
+  <data name="BlockCount" xml:space="preserve"><value>Blok Sayısı</value></data>
+  <data name="AisleCount" xml:space="preserve"><value>Koridor Sayısı (Blok başına)</value></data>
+  <data name="ShelfCount" xml:space="preserve"><value>Raf Sayısı (Koridor başına)</value></data>
+  <data name="DoorLocation" xml:space="preserve"><value>Kapı Lokasyonu</value></data>
+  <data name="DoorLeft" xml:space="preserve"><value>🚪 Sol (Başlangıç)</value></data>
+  <data name="DoorRight" xml:space="preserve"><value>🚪 Sağ (Son)</value></data>
+  <data name="DoorCenter" xml:space="preserve"><value>🚪 Orta</value></data>
+  <data name="DistanceParameters" xml:space="preserve"><value>📏 Mesafe Parametreleri</value></data>
+  <data name="AisleLength" xml:space="preserve"><value>Koridor Uzunluğu (birim)</value></data>
+  <data name="CrossAisleDistance" xml:space="preserve"><value>Geçiş Mesafesi (birim)</value></data>
+  <data name="ShowWarehouse" xml:space="preserve"><value>🏗️  Depoyu Göster</value></data>
+  <data name="OrderCreation" xml:space="preserve"><value>🛒  SİPARİŞ OLUŞTURMA</value></data>
+  <data name="RandomProductCount" xml:space="preserve"><value>Rastgele Ürün Sayısı</value></data>
+  <data name="RandomOrder" xml:space="preserve"><value>🎲  Rastgele Sipariş</value></data>
+  <data name="OrClickShelves" xml:space="preserve"><value>veya harita üzerindeki raflara tıklayın</value></data>
+  <data name="ClearOrder" xml:space="preserve"><value>🗑️  Siparişi Temizle</value></data>
+  <data name="ShowHeatmap" xml:space="preserve"><value>🔥 Isı Haritasını Göster</value></data>
+  <data name="SelectedProduct" xml:space="preserve"><value>✅ Seçili Ürün: </value></data>
+  <data name="RouteCalculation" xml:space="preserve"><value>🧮  ROTA HESAPLAMA</value></data>
+  <data name="AutoRunDescription" xml:space="preserve"><value>Tüm algoritmalar otomatik çalıştırılır ve karşılaştırılır.</value></data>
+  <data name="CalculateAllRoutes" xml:space="preserve"><value>⚡  Tüm Rotaları Hesapla</value></data>
+  <data name="WarehouseMap" xml:space="preserve"><value>🗺️  DEPO HARİTASI</value></data>
+  <data name="LegendRack" xml:space="preserve"><value>Raf</value></data>
+  <data name="LegendSelected" xml:space="preserve"><value>Seçili</value></data>
+  <data name="LegendRoute" xml:space="preserve"><value>Rota</value></data>
+  <data name="AlgorithmComparison" xml:space="preserve"><value>📊  ALGORİTMA KARŞILAŞTIRMASI</value></data>
+  <data name="ColAlgorithm" xml:space="preserve"><value>Algoritma</value></data>
+  <data name="ColDistance" xml:space="preserve"><value>Mesafe</value></data>
+  <data name="RouteDetail" xml:space="preserve"><value>🔍  ROTA DETAYI</value></data>
+  <data name="TotalDistance" xml:space="preserve"><value>TOPLAM MESAFE</value></data>
+  <data name="ComputationTime" xml:space="preserve"><value>HESAPLAMA SÜRESİ</value></data>
+  <data name="UnitDistance" xml:space="preserve"><value> birim</value></data>
+  <data name="UnitMs" xml:space="preserve"><value> ms</value></data>
+  <data name="ShowThisRoute" xml:space="preserve"><value>🎨  Bu Rotayı Göster</value></data>
+  <data name="PickOrder" xml:space="preserve"><value>Toplama Sırası:</value></data>
+  <data name="FooterText" xml:space="preserve"><value>Roodbergen IWS · </value></data>
+  <data name="FooterAlgorithms" xml:space="preserve"><value>5 Algoritma</value></data>
+
+  <!-- Canvas Labels -->
+  <data name="BlockLabel" xml:space="preserve"><value>BLOK {0}</value></data>
+  <data name="AisleLabel" xml:space="preserve"><value>K{0}</value></data>
+  <data name="ShelfTooltip" xml:space="preserve"><value>📦 {0}
+Tıklayın: Seç/Kaldır</value></data>
+  <data name="BottomCrossAisle" xml:space="preserve"><value>Alt Geçiş</value></data>
+  <data name="TopCrossAisle" xml:space="preserve"><value>Üst Geçiş</value></data>
+  <data name="DoorLabel" xml:space="preserve"><value>KAPI / Başlangıç</value></data>
+  <data name="SummaryFormat" xml:space="preserve"><value>Toplam: {0} raf | {1} koridor | {2} blok</value></data>
+
+  <!-- HistoryWindow -->
+  <data name="HistoryTitle" xml:space="preserve"><value>📜 Sipariş Geçmişi — Veritabanı Görünümü</value></data>
+  <data name="HistoryHeader" xml:space="preserve"><value>📊  SİPARİŞ GEÇMİŞİ (SQLite Veritabanı)</value></data>
+  <data name="CloseButton" xml:space="preserve"><value>Kapat</value></data>
+  <data name="ColId" xml:space="preserve"><value>ID</value></data>
+  <data name="ColItemCount" xml:space="preserve"><value>Ürün Say</value></data>
+  <data name="ColBestAlg" xml:space="preserve"><value>En İyi Alg.</value></data>
+  <data name="ColDistanceShort" xml:space="preserve"><value>Mesafe</value></data>
+  <data name="ColDate" xml:space="preserve"><value>Tarih</value></data>
+  <data name="DistanceUnitFormat" xml:space="preserve"><value>{0:F2} birim</value></data>
+
+  <!-- ViewModel Status Messages -->
+  <data name="StatusEnterParams" xml:space="preserve"><value>Depo parametrelerini girin ve 'Depoyu Göster' butonuna basın.</value></data>
+  <data name="StatusWarehouseBuilt" xml:space="preserve"><value>✓ Depo oluşturuldu: {0} raf, {1} koridor. Şimdi sipariş oluşturun.</value></data>
+  <data name="StatusError" xml:space="preserve"><value>Hata: {0}</value></data>
+  <data name="ProductNameSeq" xml:space="preserve"><value>Ürün-{0:D3}</value></data>
+  <data name="ProductNameAt" xml:space="preserve"><value>Ürün@{0}</value></data>
+  <data name="StatusOrderCreated" xml:space="preserve"><value>✓ {0} ürünlük sipariş oluşturuldu. Algoritma seçerek rotayı hesaplayın.</value></data>
+  <data name="StatusOrderCleared" xml:space="preserve"><value>Sipariş temizlendi. Yeni sipariş oluşturabilirsiniz.</value></data>
+  <data name="StatusSelectedCount" xml:space="preserve"><value>Seçili raf sayısı: {0}</value></data>
+  <data name="StatusCreateOrderFirst" xml:space="preserve"><value>Önce sipariş oluşturun!</value></data>
+  <data name="StatusAlgorithmsComputed" xml:space="preserve"><value>✓ {0} algoritma hesaplandı. En kısa mesafe: {1:F2} birim.</value></data>
+
+  <!-- Algorithm Names -->
+  <data name="SShapeName" xml:space="preserve"><value>S-Shape (Serpentin)</value></data>
+  <data name="SShapeDesc" xml:space="preserve"><value>Toplayıcı her koridoru başından sonuna kadar tam geçer, koridorlar arasında dönüşümlü yön değiştirir.</value></data>
+  <data name="LargestGapName" xml:space="preserve"><value>Largest Gap (En Büyük Boşluk)</value></data>
+  <data name="LargestGapDesc" xml:space="preserve"><value>Koridor içindeki en büyük boşluğu bularak geri dönme noktasını optimize eder; tüm koridoru geçmek yerine kısa yolu seçer.</value></data>
+  <data name="AisleByName" xml:space="preserve"><value>Aisle-by-Aisle (Koridor Bazlı)</value></data>
+  <data name="AisleByDesc" xml:space="preserve"><value>Her koridor için Return (geri dön) veya Traversal (geç) stratejisini bağımsız olarak karşılaştırır ve en kısayı seçer.</value></data>
+  <data name="OptimalNNName" xml:space="preserve"><value>Optimal - Nearest Neighbor (TSP)</value></data>
+  <data name="OptimalNNDesc" xml:space="preserve"><value>En Yakın Komşu sezgiseliyle TSP çözümü; her adımda Manhattan mesafesine göre en yakın ürünü hedefler.</value></data>
+  <data name="TwoOptName" xml:space="preserve"><value>2-Opt TSP (Gelişmiş Optimal)</value></data>
+  <data name="TwoOptDesc" xml:space="preserve"><value>Nearest Neighbor başlangıcından 2-Opt yerel arama ile iyileştirme yapan gelişmiş TSP çözümü.</value></data>
+
+  <!-- Database / Picker -->
+  <data name="DefaultConfigName" xml:space="preserve"><value>Depo_{0:yyyyMMdd_HHmmss}</value></data>
+  <data name="ConfigDetailsFormat" xml:space="preserve"><value>{0} Blok, {1} Koridor, {2} Raf — </value></data>
+  <data name="PickerDefaultName" xml:space="preserve"><value>Toplayıcı 1</value></data>
+
+  <!-- Validation -->
+  <data name="BlockCountMin" xml:space="preserve"><value>Blok sayısı en az 1 olmalıdır.</value></data>
+  <data name="AisleCountMin" xml:space="preserve"><value>Koridor sayısı en az 1 olmalıdır.</value></data>
+  <data name="ShelfCountMin" xml:space="preserve"><value>Raf sayısı en az 1 olmalıdır.</value></data>
+
+  <!-- Language Switcher -->
+  <data name="LanguageLabel" xml:space="preserve"><value>🌐 Dil / Language</value></data>
+  <data name="Turkish" xml:space="preserve"><value>Türkçe</value></data>
+  <data name="English" xml:space="preserve"><value>English</value></data>
+</root>
